@@ -11,10 +11,10 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-loginRouter.get('/',
-    (request, response) => {
-         response.send(`<h1> hello world</h1>`)
-     })  
+// loginRouter.get('/',
+//     (request, response) => {
+//          response.send(`<h1> hello world</h1>`)
+//      })  
 
 //database models
 const User = require('../models/user')
