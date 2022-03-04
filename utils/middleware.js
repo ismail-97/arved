@@ -9,6 +9,7 @@ const requestLogger = (request, response, next) => {
 }
 
 const unknownEndpoint = (request, response) => {
+  console.log('hello i am in unknownEndpoint middleware')
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
