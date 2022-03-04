@@ -10,7 +10,10 @@ const transporter = nodemailer.createTransport({
         pass: '123Edfgyui'
     }
 })
-
+loginRouter.get('/', (req, res) => {
+    res.json("hello world")
+})
+  
 //database models
 const User = require('../models/user')
 
