@@ -30,6 +30,7 @@ const conn = mongoose.connect(config.MONGODB_URI)
   
 // implemented before calling route handlers
 app.use(cors())
+app.use(express.static('build'))
 app.use(express.json())
 app.use(middleware.requestLogger)
 
