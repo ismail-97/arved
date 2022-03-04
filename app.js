@@ -3,7 +3,6 @@ const app = express()
 require('express-async-errors')
 const cors = require('cors')
 
-
 // Routers
 const loginRouter = require('./controllers/loginRouter')
 const userRouter = require('./controllers/userRouter')
@@ -20,7 +19,7 @@ const mongoose = require('mongoose')
 
 //database connection
 logger.info('connecting to', config.MONGODB_URI)
-console.log("hello == ", config.MONGODB_URI)
+logger.info("hello == ", config.MONGODB_URI)
 const conn = mongoose.connect(config.MONGODB_URI)
   .then(() => {
     logger.info('connected to MongoDB')
