@@ -82,4 +82,6 @@ adminRouter
             response.setHeader('content-type', 'application/pdf');
             response.send(pdfBytes)       
         }) 
+
+        
 module.exports = adminRouter
