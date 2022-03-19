@@ -30,7 +30,7 @@ userRouter
     .put('/change-password',
         [isAuthenticated],
         async (request, response) => {
-            const {oldPassword, newPassword, repeatedNewPassword} = request.body
+            const {oldPassword, newPassword} = request.body
             const userId = request.userId
             const user = await User.findOne({ _id: userId })
 
@@ -44,20 +44,13 @@ userRouter
                 })
             }
 
-            if (newPassword === repeatedNewPassword) {
-                const saltRounds = 10
-                const passwordHash = await bcrypt.hash(newPassword, saltRounds)
-                const updatedUser = await User.findByIdAndUpdate(
-                    userId,
-                    {passwordHash: passwordHash},
-                    {new: true})
-                response.json(updatedUser).status(200)
-            }
-            else {
-                return response.status(400).send(
-                    'passwords have to be compatible'
-                )
-            } 
+            const saltRounds = 10
+            const passwordHash = await bcrypt.hash(newPassword, saltRounds)
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                {passwordHash: passwordHash},
+                {new: true})
+            response.json(updatedUser).status(200) 
         })
 
 

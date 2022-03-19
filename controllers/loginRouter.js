@@ -11,16 +11,14 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-//database models
 const User = require('../models/user')
 
 // sign up
 loginRouter.post('/register',
     async (request, response) => {
         const body = request.body
-        const {password, repeatedPassword} = request.body
+        const {password} = request.body
 
-        if(password === repeatedPassword){
             const saltRounds = 10
             const passwordHash = await bcrypt.hash(password, saltRounds)
             const user = new User({
@@ -49,10 +47,6 @@ loginRouter.post('/register',
                 }
             )
             response.status(201).json(savedUser)
-        }
-        else response
-            .status(401)
-            .json({ error: "passwords have to be compatible" })
     })
 
 // confirming email
@@ -127,21 +121,17 @@ loginRouter.post('/forgot-password',
 // for reset password (creates a link and sends it to user email)
 loginRouter.put('/reset-password/:token', 
     async (request, response) => {
-        const {password, repeatedPassword} = request.body
+        const {password} = request.body
         jwt.verify(request.params.token, process.env.FORGOT_PASSWORD_SECRET, async (err, decoded) => {
             if (err) {
                return response.status(401).json({ error: "eroor: token verification failed" })
             }
-            if (password === repeatedPassword) {
-                const saltRounds = 10
-                const passwordHash = await bcrypt.hash(password, saltRounds)
-                await User.findByIdAndUpdate(decoded.user, { passwordHash: passwordHash }, { new: true })
-                response.status(200).send("User password updated")              
-            }
-            else {
-                response.status(400).send("passwords should be compatible")               
-            }
-
+            
+            const saltRounds = 10
+            const passwordHash = await bcrypt.hash(password, saltRounds)
+            await User.findByIdAndUpdate(decoded.user, { passwordHash: passwordHash }, { new: true })
+            response.status(200).send("User password updated")              
+            
         })  
     })
 

@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 require('express-async-errors')
 const cors = require('cors')
-
+const methodOverride = require('method-override')
 // Routers
 const loginRouter = require('./controllers/loginRouter')
 const userRouter = require('./controllers/userRouter')
@@ -19,19 +19,21 @@ const mongoose = require('mongoose')
 
 //database connection
 logger.info('connecting to', config.MONGODB_URI)
-logger.info("hello == ", config.MONGODB_URI)
-const conn = mongoose.connect(config.MONGODB_URI)
-  .then(() => {
-    logger.info('connected to MongoDB')
-  })
-  .catch((error) => {
-    logger.error('error connecting to MongoDB:', error.message)
-  })
+
+mongoose.connect(config.MONGODB_URI)
+   .then(() => {
+     logger.info('connected to MongoDB')
+   })
+   .catch((error) => {
+     logger.error('error connecting to MongoDB:', error.message)
+   })
   
+
 // implemented before calling route handlers
 app.use(cors())
 app.use(express.static('build'))
 app.use(express.json())
+app.use(methodOverride('_method'))
 app.use(middleware.requestLogger)
 
 // route handlers

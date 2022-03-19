@@ -31,7 +31,19 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
-    }
+    },
+    fileID: {
+        type: String,
+        required: true
+    },
+    url: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },   
 })
 
 productSchema.set('toJSON', {

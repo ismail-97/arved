@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const getTokenFrom = require('../helpers.js/tokenExtractor')
 
-const loginMiddleware =  (request, response, next) => {
+const loginMiddleware = (request, response, next) => {
     const token = getTokenFrom(request)
     if (token) {
          jwt.verify(token, process.env.SECRET, (err, decoded) => {
@@ -9,8 +9,6 @@ const loginMiddleware =  (request, response, next) => {
                console.log(err)
                return response.status(401).send( "eroor: access denied: token invalid" )
              }
-             console.log("decoded.id == ", decoded.id)
-
             request.userId = decoded.id
             next()
         })
