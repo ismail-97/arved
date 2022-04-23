@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
 const nodemailer = require('nodemailer')
+const Faculty = require('../models/faculty')
+const Department = require('../models/department')
 
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
@@ -12,13 +14,14 @@ const transporter = nodemailer.createTransport({
 })
 
 const User = require('../models/user')
+const faculty = require('../models/faculty')
 
 // sign up
 loginRouter.post('/register',
     async (request, response) => {
         const body = request.body
-        const {password} = request.body
-
+        const {password} = body
+        // console.log(body)
             const saltRounds = 10
             const passwordHash = await bcrypt.hash(password, saltRounds)
             const user = new User({
@@ -27,7 +30,12 @@ loginRouter.post('/register',
                 role: 'user',
                 status: 'pending'
             })
-            const savedUser = await user.save()
+        console.log('before user')
+        console.log(user)
+
+        const savedUser = await user.save()
+        console.log('before email verification')
+        console.log('savedUser  ==', savedUser)
             // email verification
             jwt.sign(
                 { user: savedUser._id },
@@ -46,7 +54,8 @@ loginRouter.post('/register',
                     })
                 }
             )
-            response.status(201).json(savedUser)
+        console.log('after email verification')
+        response.status(201).json(savedUser)
     })
 
 // confirming email
@@ -134,5 +143,20 @@ loginRouter.put('/reset-password/:token',
             
         })  
     })
+
+loginRouter.get('/faculties', async (request, response) => {
+    let faculties = await Faculty.find({})
+    response.status(200).json(faculties)
+})
+
+// POST is used since can't send payload with get request.
+loginRouter.post('/departments', async (request, response) => {
+    let departments = await Department.find({ faculty: request.body.faculty })
+    response.status(200).json(departments)
+})
+
+loginRouter.get('/academic_titles', async () => {
+
+})
 
 module.exports = loginRouter

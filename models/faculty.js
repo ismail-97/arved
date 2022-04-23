@@ -13,5 +13,9 @@ const facultySchema = new mongoose.Schema(
 )
 
 facultySchema.plugin(uniqueValidator);
-
+facultySchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+        // delete returnedObject._id
+    }
+})
 module.exports = mongoose.model('Faculty', facultySchema)

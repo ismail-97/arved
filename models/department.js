@@ -6,7 +6,7 @@ const departmentSchema = new mongoose.Schema(
         name: {
             type: String,
             required: true,
-            unique: true,
+            // unique: true,
         },
         faculty: {
             type: String,
@@ -16,4 +16,8 @@ const departmentSchema = new mongoose.Schema(
     }
 )
 
+departmentSchema.set('toJSON', {
+    transform: (document, returnedObject) => {
+    }
+})
 module.exports = mongoose.model('Department', departmentSchema)

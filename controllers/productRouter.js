@@ -1,10 +1,8 @@
 const multer = require('multer')
-const {GridFsStorage} = require('multer-gridfs-storage')
-const crypto = require('crypto')
-const path = require('path');
+const { GridFsStorage } = require('multer-gridfs-storage')
 const Grid = require('gridfs-stream') 
+const crypto = require('crypto')
 const mongoose = require('mongoose')
-const fs = require('fs');
 
 const productRouter = require('express').Router()
 const isAuthenticated = require('../utils/loginMiddleware')
@@ -78,7 +76,7 @@ productRouter.post('/',
 productRouter.get('/files/:id',
         [isAuthenticated, isVerified],
         async (request, response) => {
-                await gfs.files.findOne({ filename: "Ist_to_cairo.pdf" }, async (err, file) => {
+                gfs.files.findOne({ _id: mongoose.Types.ObjectId(request.params.id) }, async (err, file) => {
                         if (!file || file.length === 0) {
                           return response.status(404).json({
                             error: "That File Doesn't Exist"
@@ -87,6 +85,11 @@ productRouter.get('/files/:id',
                         if (file.contentType === "application/pdf") {
                           // Read output to browser
                                 const readstream = gridfsBucket.openDownloadStream(file._id);
+                                response.writeHead(200, {
+                                        'Content-Type': 'application/pdf',
+                                        'Content-Disposition': 'attachment; filename=sample.pdf',
+                                        'Content-Transfer-Encoding': 'Binary'
+                                });
                                 readstream.pipe(response);
                         } else {
                             response.status(404).json({

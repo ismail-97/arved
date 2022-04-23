@@ -33,8 +33,8 @@ adminRouter
         async (request, response) => {
             const pendingUsers = await User.find({ status: "pending" })
             response.status(200).json(pendingUsers) 
-        })
-  
+})
+
 adminRouter
     .put('/pendingAccounts/:id',
         [isAuthenticated, isVerified, isAdmin],

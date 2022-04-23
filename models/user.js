@@ -66,7 +66,7 @@ const userSchema = new mongoose.Schema({
     department: {
         type: String,
         required: true,
-        validate: v => validators.isDepartment(v)
+        // validate: v => validators.isDepartment(v)
     },
     fields: {
         type: [String],
