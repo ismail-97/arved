@@ -30,12 +30,8 @@ loginRouter.post('/register',
                 role: 'user',
                 status: 'pending'
             })
-        console.log('before user')
-        console.log(user)
 
         const savedUser = await user.save()
-        console.log('before email verification')
-        console.log('savedUser  ==', savedUser)
             // email verification
             jwt.sign(
                 { user: savedUser._id },
@@ -43,7 +39,6 @@ loginRouter.post('/register',
                 { expiresIn: '1d' },
                 (error, emailToken) => {
                     if (error) {
-                        console.log("error = = = = = = = = ",error)
                         response.status(400)
                     }
                     const url = `http://localhost:3001/confirmation/${emailToken}`;
@@ -54,7 +49,6 @@ loginRouter.post('/register',
                     })
                 }
             )
-        console.log('after email verification')
         response.status(201).json(savedUser)
     })
 
@@ -66,8 +60,7 @@ loginRouter.get('/confirmation/:token',
                return response.status(401).json({ error: "eroor: email verification failed" })
             }
             await User.findByIdAndUpdate(decoded.user, {isVerified: true }, { new: true })
-
-            response.status(200).send({message: "verification is done"})
+            response.status(200).redirect('http://localhost:3000/verification')
         })       
     })   
 
@@ -99,8 +92,12 @@ loginRouter.post('/login',
                 name: user.name,
                 surname: user.surname,
                 status: user.status,
-                isVerified: user.isVerified
+                isVerified: user.isVerified,
+                role: user.role,
+                department: user.department
             })
+                // response
+
     })
 
 // for forgot password (takes a user email & creates a link for changing password and sends it that email)
