@@ -235,11 +235,11 @@ adminRouter
         async (request, response) => {
             const products = request.body
             const pdfBytes = await createPdf()
-            // response.writeHead(200, {
-            //         'Content-Type': 'application/pdf',
-            //         'Content-Disposition': 'attachment; filename=sample.pdf',
-            //         'Content-Transfer-Encoding': 'Binary'
-            // });
+            response.writeHead(200, {
+                    'Content-Type': 'application/pdf',
+                    'Content-Disposition': 'attachment; filename=sample.pdf',
+                    'Content-Transfer-Encoding': 'Binary'
+            });
             response.end(pdfBytes);
         }) 
 
