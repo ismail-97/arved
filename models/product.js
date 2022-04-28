@@ -16,7 +16,7 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     publication_date: {
-        type: Date,
+        type: Number,
         required: true
     },
     publisher: {
@@ -49,7 +49,7 @@ const productSchema = new mongoose.Schema({
 productSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
-        returnedObject.date = getFullDate(returnedObject.publication_date)
+        // returnedObject.date = getFullDate(returnedObject.publication_date)
         delete returnedObject._id
         delete returnedObject.__v    
         delete returnedObject.user

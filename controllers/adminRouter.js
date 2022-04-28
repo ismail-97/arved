@@ -206,7 +206,7 @@ adminRouter
         })
 
 adminRouter
-    .post('/report',
+    .post('/filter',
         [isAuthenticated, isVerified, isAdmin],
         async (request, response) => {
             const adminId = request.userId
@@ -214,13 +214,16 @@ adminRouter
             const adminDepartment = admin.department
 
             const body = request.body
+            console.log('-----------------------------------')
 
             const products = await Product.find(
                 {
-                    type: 'project',
-                    authors: 'sherif mostafa',
-                    publisher: 'ismail Dewidar',
-                    citations: '85',
+                    citations: { $lte:  parseInt(body.citationsLessThan), $gte: parseInt(body.citationsMoreThan)},
+                    publication_date: { $lte: parseInt(body.dateBefore), $gte:  parseInt(body.dateAfter)},
+                    title: new RegExp(`${body.title.toLowerCase()}`),
+                    type: body.type,
+                    authors: new RegExp(`${body.authors.toLowerCase()}`),
+                    publisher: new RegExp(`${body.publisher.toLowerCase()}`),
                     department: adminDepartment
                 })
             
