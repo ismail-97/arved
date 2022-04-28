@@ -43,38 +43,38 @@ const createFields = (page, form, title, type, date, authors, citations, y_axis,
     const titleField = form.createTextField(`titleField${rowNumber}`)
     titleField.setText(capitalizeWords(title))
     titleField.enableMultiline()
-    titleField.addToPage(page, { x: 10, y: y_axis, width: 255, height: 54 })
-    titleField.setFontSize(14)
+    titleField.addToPage(page, { x: 30, y: y_axis, width: 235, height: 54 })
+    titleField.setFontSize(12)
     titleField.setAlignment(0)
 
     const typeField = form.createTextField(`typeField${rowNumber}`)
-    typeField.enableMultiline()
+    // typeField.enableMultiline()
     typeField.setText(capitalizeWords(type))
     typeField.addToPage(page, { x: 270, y: y_axis, width: 75, height: 54 })
-    typeField.setFontSize(14)
+    typeField.setFontSize(12)
     typeField.setAlignment(1)
 
     const dateField = form.createTextField(`dateField${rowNumber}`)
     dateField.setText(date)
     dateField.addToPage(page, { x: 350, y: y_axis, width: 35, height: 54 })
-    dateField.setFontSize(14)
+    dateField.setFontSize(12)
     dateField.setAlignment(1)
 
     const authorsField = form.createTextField(`authorsField${rowNumber}`)
     authorsField.enableMultiline()
     authorsField.setText(capitalizeNames(authors))
     authorsField.addToPage(page, { x: 390, y: y_axis, width: 150, height: 54 })
-    authorsField.setFontSize(14)
+    authorsField.setFontSize(12)
     authorsField.setAlignment(1)
 
     const citationsField = form.createTextField(`citationsField${rowNumber}`)
     citationsField.setText(citations)
-    citationsField.addToPage(page, { x: 545, y: y_axis, width: 40, height: 54 })
-    citationsField.setFontSize(14)
+    citationsField.addToPage(page, { x: 545, y: y_axis, width: 30, height: 54 })
+    citationsField.setFontSize(12)
     citationsField.setAlignment(1)
 
 }
-async function createPdf() {
+async function createPdf(products) {
     const pdfDoc = await PDFDocument.create()
     const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
     const timesRomanBold = await pdfDoc.embedFont(StandardFonts.TimesRomanBold)
@@ -85,83 +85,94 @@ async function createPdf() {
     const fontSize = 30
 
     // page titles
-    drawText(page, 'Ankara Üniversitesi', 40, 3, 0, courier)
+    drawText(page, 'Ankara Üniversitesi', 40, 3, 0, timesRomanFont)
     drawText(page, 'Computer Engineering Department', 30, 4.5, 0, timesRomanFont)
-    drawText(page, 'Academic Products Report', 25, 6, 0, timesRomanBold)
+    drawText(page, 'Academic Products Report', 25, 6, 0, timesRomanFont)
 
     // form
-    drawText(page, 'Title', 16, 9, 10, timesRomanBold)
-    drawText(page, 'Type', 16, 9, 290, timesRomanBold)
-    drawText(page, 'Date', 16, 9, 352, timesRomanBold)
-    drawText(page, 'Authors', 16, 9, 435, timesRomanBold)
-    drawText(page, 'Ciations', 16, 9, 532, timesRomanBold)
+    drawText(page, 'Title', 14, 9, 40, timesRomanBold)
+    drawText(page, 'Type', 14, 9, 290, timesRomanBold)
+    drawText(page, 'Date', 14, 9, 352, timesRomanBold)
+    drawText(page, 'Authors', 14, 9, 435, timesRomanBold)
+    drawText(page, 'Ciations', 14, 9, 529, timesRomanBold)
 
     const form = pdfDoc.getForm()
     let rowNumber = 1
     let y_axis = 500
-    createFields(page, form,
-        'face detection using AI technology.',
-        'project',
-        "2017",
-        'ismail dewidar\nsherif mostafa\nadnan kashlan',
-        "85",
-        y_axis,
-        rowNumber++
-    );
-    createFields(page, form,
-        'letter recognition using machine learning.',
-        'conference paper',
-        "2010",
-        'sherif mostafa\nadnan kashlan',
-        "72",
-        y_axis-(rowNumber-1)*60,
-        rowNumber++
-    );
-    createFields(page, form,
-        'A new approach to the reconstruction of contour lines extracted from topographic maps.',
-        'article',
-        "2022",
-        'refik samet',
-        "65",
-        y_axis-(rowNumber-1)*60,
-        rowNumber++
-    );
-    createFields(page, form,
-        'face detection using AI technology.',
-        'project',
-        "2017",
-        'ismail dewidar\nsherif mostafa\nadnan kashlan',
-        "85",
-        y_axis-(rowNumber-1)*60,
-        rowNumber++
-    );
-    createFields(page, form,
-        'letter recognition using machine learning.',
-        'conference paper',
-        "2010",
-        'sherif mostafa\nadnan kashlan',
-        "72",
-        y_axis-(rowNumber-1)*60,
-        rowNumber++
-    );
-    createFields(page, form,
-        'A new approach to the reconstruction of contour lines extracted from topographic maps.',
-        'article',
-        "2022",
-        'refik samet',
-        "65",
-        y_axis-(rowNumber-1)*60,
-        rowNumber++
-    );
-    createFields(page, form,
-        'face detection using AI technology.',
-        'project',
-        "2017",
-        'ismail dewidar\nsherif mostafa\nadnan kashlan',
-        "85",
-        y_axis-(rowNumber-1)*60,
-        rowNumber++
-    );
+    products.map((product) => {
+        createFields(page, form,
+            product.title,
+            product.type,
+            product.publication_date.toString(),
+            product.authors.slice(0, 3).join('\n'),
+            product.citations.toString(),
+            y_axis-(rowNumber-1)*60,
+            rowNumber++
+        );        
+    })
+    // createFields(page, form,
+    //     'face detection using AI technology.',
+    //     'project',
+    //     "2017",
+    //     'ismail dewidar\nsherif mostafa\nadnan kashlan',
+    //     "85",
+    //     y_axis,
+    //     rowNumber++
+    // );
+    // createFields(page, form,
+    //     'letter recognition using machine learning.',
+    //     'conference paper',
+    //     "2010",
+    //     'sherif mostafa\nadnan kashlan',
+    //     "72",
+    //     y_axis-(rowNumber-1)*60,
+    //     rowNumber++
+    // );
+    // createFields(page, form,
+    //     'A new approach to the reconstruction of contour lines extracted from topographic maps.',
+    //     'article',
+    //     "2022",
+    //     'refik samet',
+    //     "65",
+    //     y_axis-(rowNumber-1)*60,
+    //     rowNumber++
+    // );
+    // createFields(page, form,
+    //     'face detection using AI technology.',
+    //     'project',
+    //     "2017",
+    //     'ismail dewidar\nsherif mostafa\nadnan kashlan',
+    //     "85",
+    //     y_axis-(rowNumber-1)*60,
+    //     rowNumber++
+    // );
+    // createFields(page, form,
+    //     'letter recognition using machine learning.',
+    //     'conference paper',
+    //     "2010",
+    //     'sherif mostafa\nadnan kashlan',
+    //     "72",
+    //     y_axis-(rowNumber-1)*60,
+    //     rowNumber++
+    // );
+    // createFields(page, form,
+    //     'A new approach to the reconstruction of contour lines extracted from topographic maps.',
+    //     'article',
+    //     "2022",
+    //     'refik samet',
+    //     "65",
+    //     y_axis-(rowNumber-1)*60,
+    //     rowNumber++
+    // );
+    // createFields(page, form,
+    //     'face detection using AI technology.',
+    //     'project',
+    //     "2017",
+    //     'ismail dewidar\nsherif mostafa\nadnan kashlan',
+    //     "85",
+    //     y_axis-(rowNumber-1)*60,
+    //     rowNumber++
+    // );
 
     form.flatten();
     const pdfBytes = await pdfDoc.save()
@@ -214,9 +225,6 @@ adminRouter
             // const adminDepartment = admin.department
 
             const body = request.body
-            console.log(body.citationsLessThan)
-            console.log(body.citationsLessThan ?
-                parseInt(body.citationsLessThan) : 10000,)
             const products = await Product.find(
                 {
                     citations: {
@@ -233,7 +241,7 @@ adminRouter
                     },
                     title: body.title ?
                         new RegExp(`${body.title.toLowerCase()}`): /.*/,
-                    type: body.type ? body.type : /.*/,
+                    type: body.type && body.type !== "All" ? body.type : /.*/,
                     authors: body.authors ?
                         new RegExp(`${body.authors.toLowerCase()}`): /.*/,
                     publisher: body.publisher ?
@@ -244,19 +252,22 @@ adminRouter
             console.log("products == ", products)
 
             response.status(200).json(products)         
-        })  
+        })
 
 adminRouter
-    .get('/filter/create-pdf',
+    .post('/filter/create-pdf',
         //[isAuthenticated, isVerified, isAdmin],
         async (request, response) => {
+            console.log("i am here")
+
             const products = request.body
-            const pdfBytes = await createPdf()
-            response.writeHead(200, {
-                    'Content-Type': 'application/pdf',
-                    'Content-Disposition': 'attachment; filename=sample.pdf',
-                    'Content-Transfer-Encoding': 'Binary'
-            });
+            console.log(products)
+            const pdfBytes = await createPdf(products)
+            // response.writeHead(200, {
+            //         'Content-Type': 'application/pdf',
+            //         'Content-Disposition': 'attachment; filename=sample.pdf',
+            //         'Content-Transfer-Encoding': 'Binary'
+            // });
             response.end(pdfBytes);
         }) 
 
