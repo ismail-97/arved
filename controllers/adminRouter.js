@@ -207,24 +207,38 @@ adminRouter
 
 adminRouter
     .post('/filter',
-        [isAuthenticated, isVerified, isAdmin],
+        // [isAuthenticated, isVerified, isAdmin],
         async (request, response) => {
-            const adminId = request.userId
-            const admin = await User.findOne({ _id: adminId })
-            const adminDepartment = admin.department
+            // const adminId = request.userId
+            // const admin = await User.findOne({ _id: adminId })
+            // const adminDepartment = admin.department
 
             const body = request.body
-            console.log('-----------------------------------')
-
+            console.log(body.citationsLessThan)
+            console.log(body.citationsLessThan ?
+                parseInt(body.citationsLessThan) : 10000,)
             const products = await Product.find(
                 {
-                    citations: { $lte:  parseInt(body.citationsLessThan), $gte: parseInt(body.citationsMoreThan)},
-                    publication_date: { $lte: parseInt(body.dateBefore), $gte:  parseInt(body.dateAfter)},
-                    title: new RegExp(`${body.title.toLowerCase()}`),
-                    type: body.type,
-                    authors: new RegExp(`${body.authors.toLowerCase()}`),
-                    publisher: new RegExp(`${body.publisher.toLowerCase()}`),
-                    department: adminDepartment
+                    citations: {
+                        $lte: body.citationsLessThan ?
+                            parseInt(body.citationsLessThan) : 10000,
+                        $gte: body.citationsMoreThan ?
+                            parseInt(body.citationsMoreThan) : 0
+                    },
+                    publication_date: {
+                        $lte: body.dateBefore ?
+                            parseInt(body.dateBefore) :  new Date().getFullYear(),
+                        $gte: body.dateAfter ?
+                            parseInt(body.dateAfter) : 1922
+                    },
+                    title: body.title ?
+                        new RegExp(`${body.title.toLowerCase()}`): /.*/,
+                    type: body.type ? body.type : /.*/,
+                    authors: body.authors ?
+                        new RegExp(`${body.authors.toLowerCase()}`): /.*/,
+                    publisher: body.publisher ?
+                        new RegExp(`${body.publisher.toLowerCase()}`): /.*/,
+                    // department: adminDepartment
                 })
             
             console.log("products == ", products)
