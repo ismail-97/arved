@@ -218,11 +218,11 @@ adminRouter
 
 adminRouter
     .post('/filter',
-        // [isAuthenticated, isVerified, isAdmin],
+        [isAuthenticated, isVerified, isAdmin],
         async (request, response) => {
-            // const adminId = request.userId
-            // const admin = await User.findOne({ _id: adminId })
-            // const adminDepartment = admin.department
+            const adminId = request.userId
+            const admin = await User.findOne({ _id: adminId })
+            const adminDepartment = admin.department
 
             const body = request.body
             const products = await Product.find(
@@ -240,17 +240,15 @@ adminRouter
                             parseInt(body.dateAfter) : 1922
                     },
                     title: body.title ?
-                        new RegExp(`${body.title.toLowerCase()}`): /.*/,
-                    type: body.type && body.type !== "All" ? body.type : /.*/,
+                        new RegExp( "^" + body.title, 'i'): /.*/,
+                    type: body.type && body.type !== "All" ?
+                        new RegExp( "^" + body.type, 'i') : /.*/,
                     authors: body.authors ?
-                        new RegExp(`${body.authors.toLowerCase()}`): /.*/,
+                        new RegExp( "^" + body.authors, 'i'): /.*/,
                     publisher: body.publisher ?
-                        new RegExp(`${body.publisher.toLowerCase()}`): /.*/,
-                    // department: adminDepartment
+                        new RegExp( "^" + body.publisher, 'i') : /.*/,
+                    department: adminDepartment
                 })
-            
-            console.log("products == ", products)
-
             response.status(200).json(products)         
         })
 
