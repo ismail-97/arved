@@ -44,12 +44,12 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },   
+    // Indexed and Abstracted: SCI/SCIE 
 })
 
 productSchema.set('toJSON', {
     transform: (document, returnedObject) => {
         returnedObject.id = returnedObject._id.toString()
-        // returnedObject.date = getFullDate(returnedObject.publication_date)
         delete returnedObject._id
         delete returnedObject.__v    
         delete returnedObject.user
@@ -58,10 +58,5 @@ productSchema.set('toJSON', {
 
 productSchema.plugin(uniqueValidator);
 
-const getFullDate = (date) => {
-    return date.getDate()
-        + '-' + (date.getMonth() + 1)
-        + '-' + date.getFullYear() 
-}
 
 module.exports = mongoose.model('Product', productSchema)
