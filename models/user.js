@@ -46,16 +46,6 @@ const userSchema = new mongoose.Schema({
         required: true
 
     },
-    academicId: {
-        type: String,
-        validate: {
-            validator: function (val) {
-                return validator.isNumeric(val);
-            },
-        },
-        unique: true,
-        required: true
-    },
     email: {
         type: String,
         unique: true,
