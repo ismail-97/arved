@@ -61,7 +61,8 @@ productRouter.post('/',
                 const body = {
                         title: request.body.title,
                         type: request.body.type,
-                        authors: typeof request.body.authors === "string" ? JSON.parse(request.body.authors) : request.body.authors,
+                        // authors: typeof request.body.authors === "string" ? JSON.parse(request.body.authors) : request.body.authors,
+                        authors: request.body.authors,
                         publication_date: request.body.publication_date,
                         publisher: request.body.publisher,
                         citations: request.body.citations,
@@ -89,7 +90,6 @@ productRouter.get('/files/:id',
                         if (file.contentType === "application/pdf") {
                           // Read output to browser
                                 const readstream = gridfsBucket.openDownloadStream(file._id);
-                                // response.setHeader("Content-Disposition", 'attachment; filename="' + file.filename + '"')
                                 response.writeHead(200, {
                                         'Content-Disposition':  file.filename,
                                         'Content-Type': 'application/pdf',
