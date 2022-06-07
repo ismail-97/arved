@@ -56,6 +56,8 @@ productRouter.post('/',
         [isAuthenticated, isVerified, upload.single('file')],
         async (request, response) => {  
 
+                console.log("typeof authors == ", typeof request.body.authors)
+                console.log("authors == ", request.body.authors)
                 const body = {
                         title: request.body.title,
                         type: request.body.type,
@@ -87,9 +89,10 @@ productRouter.get('/files/:id',
                         if (file.contentType === "application/pdf") {
                           // Read output to browser
                                 const readstream = gridfsBucket.openDownloadStream(file._id);
+                                // response.setHeader("Content-Disposition", 'attachment; filename="' + file.filename + '"')
                                 response.writeHead(200, {
+                                        'Content-Disposition':  file.filename,
                                         'Content-Type': 'application/pdf',
-                                        'Content-Disposition': 'attachment; filename=sample.pdf',
                                         'Content-Transfer-Encoding': 'Binary'
                                 });
                                 readstream.pipe(response);
