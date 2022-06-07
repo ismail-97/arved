@@ -24,6 +24,16 @@ const userSchema = new mongoose.Schema({
         required: true
 
     },
+    orcid: {
+        type: String,
+        validate: {
+            validator: function (val) {
+                return validator.isNumeric(val);
+            },
+        },
+        unique: true,
+        required: true
+    },
     title: {
         type: String,
         enum: [
@@ -45,7 +55,6 @@ const userSchema = new mongoose.Schema({
         },
         unique: true,
         required: true
-
     },
     email: {
         type: String,

@@ -53,11 +53,11 @@ productRouter.get('/',
 
 productRouter.post('/',
         [isAuthenticated, isVerified, upload.single('file')],
-        async (request, response) => {        
+        async (request, response) => {      
                 const body = {
                         title: request.body.title,
                         type: request.body.type,
-                        authors: request.body.authors,
+                        authors: JSON.parse(request.body.authors),
                         publication_date: request.body.publication_date,
                         publisher: request.body.publisher,
                         citations: request.body.citations,

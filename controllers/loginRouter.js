@@ -6,10 +6,11 @@ const Faculty = require('../models/faculty')
 const Department = require('../models/department')
 
 const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    host: 'smtp.ethereal.email',
+    port: 587,
     auth: {
-        user: "arvedsystem@gmail.com",
-        pass: '123Edfgyui'
+        user: "diana.hoppe45@ethereal.email",
+        pass: '4Ug2quEHaBm4pKNjzJ'
     }
 })
 
@@ -43,9 +44,11 @@ loginRouter.post('/register',
                     }
                     const url = `http://localhost:3001/confirmation/${emailToken}`;
                     transporter.sendMail({
-                        to: "ismailkamaleldin@gmail.com",
+                        to: "arvedsystem@outlook.com",
                         subject: "Confrim Your ARVED account",
-                        html: `To confim your email click here: <a href= "${url}"> ${url}</a>`
+                        html: `<html>
+                        <body> To confim your email click here: <a href= "${url}"> ${url}</a>  </body>
+                        </html>`
                     })
                 }
             )
