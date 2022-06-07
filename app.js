@@ -30,9 +30,9 @@ mongoose.connect(config.MONGODB_URI)
   
 
 // implemented before calling route handlers
-app.use(cors({
-  exposedHeaders: ['Content-Disposition']
-}))
+app.use(cors(
+  // {  exposedHeaders: ['Content-Disposition'] }
+    ))
 app.use(express.static('build'))
 app.use(express.json())
 app.use(methodOverride('_method'))
