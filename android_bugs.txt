@@ -1,0 +1,51 @@
+Android App Bugs List.
+
+- (Not so important) Make department's item unselectable whene there is no items but the message.
+
+- Once or twice I saw a duplication of the last fields of the fields of study in the user card in the ArvedAdminList
+
+- Add check for internet. (https://stackoverflow.com/questions/9570237/android-check-internet-connection)
+
+- Solve the stack problem when signed in so you can exit the app, but without a problem when pressing the back button after signing out.
+
+- Add a progress bar for adding a product.
+
+- make email domain dynamic or changable
+
+- Sign Up (may bde AddEditProduct also) Fragment does a lot of UI computations on the main thread, should be changed.
+
++ 74 TODOs inside the source code
+
+-------------------------- FIXED BUGS -----------------------------
+
+- (DONE) clickable text view for url in produxt view fragment 
+
+- (DONE) selectable text views in produxt view fragment
+
+- (DONE) text wrap for description of product in  add_edit fragment
+
+- (DONE) delete product from product view is not refreshing the profile page and doesn't show the deletion message
+
+- (DONE) cancel and back buttons in add product and sign up pages
+
+- (Done) Close the keyboard automatically when the any submit button is pressed.
+
+- (Done) Being able to display a dynamic number of fields of study in the profile page.
+
+- (Done) check for success and failure after each api call
+
+- (DONE) try to remove the slight lag when navigating to a fragment from the nav drawer
+
+- (DONE) fix pen icon size in the nav drawer
+
+- (DONE) fix the additional authors icon
+
+- (Done) Make department and faculty input fields expandable
+
+- (Done) Show appropriate message if the user clicked on faculty and department drop-down menu before the data has been fetched.
+
+- (Done) ime button in the keyboad in the sign up / add product pages
+
+- (DONE) Fix product post with form-data (and get when available)
+
+- (DONE) Fix authors list when pushed by Add Product.
