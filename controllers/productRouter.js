@@ -54,7 +54,9 @@ productRouter.get('/',
         
 productRouter.post('/',
         [isAuthenticated, isVerified, upload.single('file')],
-        async (request, response) => {      
+        async (request, response) => {  
+                console.log(request.body.authors)
+
                 const body = {
                         title: request.body.title,
                         type: request.body.type,
@@ -108,10 +110,16 @@ productRouter.get('/:id',
         })
 
 productRouter.put('/:id',
-        [isAuthenticated, isVerified],
+        [isAuthenticated, isVerified, upload.single('file')],
         async (request, response) => {
             const body = request.body    
-            const product = {...body}
+                const product = {
+                        ...body,
+                        fileID: request.file.id.toString(),
+                        authors: JSON.parse(body.authors),
+                }
+                // deleteFile(request.params.id)
+                
             const updatedProduct = await Product.findByIdAndUpdate(request.params.id, product, { new: true })
             response
                 .status(200)
@@ -125,4 +133,18 @@ productRouter.delete('/:id',
             response.status(204).end()
         })
 
+const deleteFile = async (productId) => {
+        const product = await Product.findById(productId)
+        gridfsBucket.delete(new mongoose.Types.ObjectId(productId.fileID),
+                (err, date) => {
+                        if (err) {
+                                return res.status(404).json({ err: err})
+                        }
+                        res.status.json({
+                                success: true,
+                                message: `File with Id ${productId.fileID} is deleted`
+                        })
+                }
+        )
+}
 module.exports = productRouter
