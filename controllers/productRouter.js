@@ -51,6 +51,7 @@ productRouter.get('/',
                 response.json(userProducts).status(200)
         })
 
+        
 productRouter.post('/',
         [isAuthenticated, isVerified, upload.single('file')],
         async (request, response) => {      
