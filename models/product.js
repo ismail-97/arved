@@ -43,8 +43,12 @@ const productSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
-    },   
-    // Indexed and Abstracted: SCI/SCIE 
+    },
+    // indexed_and_abstracted: {
+    //     type: String,
+    //     required: true,
+    //     enum: ['SCI', 'SCIE']
+    // }
 })
 
 productSchema.set('toJSON', {

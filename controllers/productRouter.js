@@ -50,8 +50,7 @@ productRouter.get('/',
                 const userProducts = await Product.find({ user: userId })
                 response.json(userProducts).status(200)
         })
-
-        
+   
 productRouter.post('/',
         [isAuthenticated, isVerified, upload.single('file')],
         async (request, response) => {  
@@ -90,7 +89,7 @@ productRouter.get('/files/:id',
                           // Read output to browser
                                 const readstream = gridfsBucket.openDownloadStream(file._id);
                                 response.writeHead(200, {
-                                        // "Content-Disposition":  'attachment; filename="' + file.filename + '"',
+                                        'Content-Disposition':  `${file.filename}`,
                                         'Content-Type': 'application/pdf',
                                         'Content-Transfer-Encoding': 'Binary'
                                 });
@@ -146,18 +145,4 @@ productRouter.delete('/:id',
                 response.status(204).end()
         })
 
-const deleteFile = async (productId) => {
-        const product = await Product.findById(productId)
-        gridfsBucket.delete(new mongoose.Types.ObjectId(productId.fileID),
-                (err, date) => {
-                        if (err) {
-                                return res.status(404).json({ err: err})
-                        }
-                        res.status.json({
-                                success: true,
-                                message: `File with Id ${productId.fileID} is deleted`
-                        })
-                }
-        )
-}
 module.exports = productRouter
