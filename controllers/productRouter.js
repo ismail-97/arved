@@ -56,13 +56,12 @@ productRouter.post('/',
         [isAuthenticated, isVerified, upload.single('file')],
         async (request, response) => {  
 
-                console.log("typeof authors == ", typeof request.body.authors)
-                console.log("authors == ", request.body.authors)
                 const body = {
                         title: request.body.title,
                         type: request.body.type,
-                        // authors: typeof request.body.authors === "string" ? JSON.parse(request.body.authors) : request.body.authors,
-                        authors: request.body.authors,
+                        authors: typeof request.body.authors === "string" ?
+                                request.body.authors.split(',') :
+                                request.body.authors,
                         publication_date: request.body.publication_date,
                         publisher: request.body.publisher,
                         citations: request.body.citations,
@@ -91,7 +90,7 @@ productRouter.get('/files/:id',
                           // Read output to browser
                                 const readstream = gridfsBucket.openDownloadStream(file._id);
                                 response.writeHead(200, {
-                                        "Content-Disposition": "attachment;filename=" + file.filename,
+                                        "Content-Disposition":  'attachment; filename="' + file.filename + '"',
                                         'Content-Type': 'application/pdf',
                                         'Content-Transfer-Encoding': 'Binary'
                                 });
@@ -114,25 +113,35 @@ productRouter.get('/:id',
 productRouter.put('/:id',
         [isAuthenticated, isVerified, upload.single('file')],
         async (request, response) => {
-            const body = request.body    
-                const product = {
-                        ...body,
-                        fileID: request.file.id.toString(),
-                        authors: JSON.parse(body.authors),
-                }
-                // deleteFile(request.params.id)
-                
-            const updatedProduct = await Product.findByIdAndUpdate(request.params.id, product, { new: true })
-            response
-                .status(200)
-                .json(updatedProduct)
+                // delete product file and chunks
+                const product = await Product.findById(request.params.id)
+                gridfsBucket.delete(mongoose.Types.ObjectId(product.fileID))
+
+                const body = request.body    
+                        const editedproduct = {
+                                ...body,
+                                fileID: request.file.id.toString(),
+                                authors: typeof request.body.authors === "string" ?
+                                        request.body.authors.split(',') :
+                                        request.body.authors,                        }
+                        
+                const updatedProduct = await Product.findByIdAndUpdate(request.params.id, editedproduct, { new: true })
+                response
+                        .status(200)
+                        .json(updatedProduct)
         })
 
 productRouter.delete('/:id',
         [isAuthenticated, isVerified],
         async (request, response) => {
-            await Product.findByIdAndRemove(request.params.id)
-            response.status(204).end()
+                // delete product file and chunks
+                const product = await Product.findById(request.params.id)
+                gridfsBucket.delete(mongoose.Types.ObjectId(product.fileID))
+
+                // delete product itself
+                await Product.findByIdAndRemove(request.params.id)
+
+                response.status(204).end()
         })
 
 const deleteFile = async (productId) => {
