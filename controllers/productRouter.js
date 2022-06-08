@@ -115,15 +115,17 @@ productRouter.put('/:id',
         async (request, response) => {
                 // delete product file and chunks
                 const product = await Product.findById(request.params.id)
-                gridfsBucket.delete(mongoose.Types.ObjectId(product.fileID))
+                if (request.file)
+                        gridfsBucket.delete(mongoose.Types.ObjectId(product.fileID))
 
                 const body = request.body    
                         const editedproduct = {
                                 ...body,
-                                fileID: request.file.id.toString(),
+                                fileID: request.file ? request.file.id.toString() : product.fileID,
                                 authors: typeof request.body.authors === "string" ?
                                         request.body.authors.split(',') :
-                                        request.body.authors,                        }
+                                        request.body.authors,
+                        }
                         
                 const updatedProduct = await Product.findByIdAndUpdate(request.params.id, editedproduct, { new: true })
                 response
