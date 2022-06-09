@@ -1,5 +1,7 @@
 Android App Bugs List.
 
+- Fix downlaoding document in Product View Fragment. (It downloads the file but writes in incorrectly)
+
 - (Not so important) Make department's item unselectable whene there is no items but the message.
 
 - Once or twice I saw a duplication of the last fields of the fields of study in the user card in the ArvedAdminList
@@ -8,8 +10,6 @@ Android App Bugs List.
 
 - Solve the stack problem when signed in so you can exit the app, but without a problem when pressing the back button after signing out.
 
-- Add a progress bar for adding a product.
-
 - make email domain dynamic or changable
 
 - Sign Up (may bde AddEditProduct also) Fragment does a lot of UI computations on the main thread, should be changed.
@@ -17,6 +17,8 @@ Android App Bugs List.
 + 74 TODOs inside the source code
 
 -------------------------- FIXED BUGS -----------------------------
+
+- (DONE) Add a progress bar for adding a product.
 
 - (DONE) clickable text view for url in produxt view fragment 
 
