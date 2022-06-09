@@ -297,7 +297,7 @@ adminRouter
 
 adminRouter
     .post('/filter/create-pdf',
-        //[isAuthenticated, isVerified, isAdmin],
+        [isAuthenticated, isVerified, isAdmin],
         async (request, response) => {
             const products = request.body
             console.log("products === ", products)
