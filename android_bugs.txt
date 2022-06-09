@@ -1,5 +1,7 @@
 Android App Bugs List.
 
+- Add a toast message when a download starts. 
+
 - Fix downlaoding document in Product View Fragment. (It downloads the file but writes in incorrectly)
 
 - (Not so important) Make department's item unselectable whene there is no items but the message.
