@@ -1,4 +1,5 @@
 const adminRouter = require('express').Router()
+const fetch = require('node-fetch');
 const User = require('../models/user')
 const isAuthenticated = require('../utils/loginMiddleware')
 const isVerified = require('../utils/verifiyMiddleware')
@@ -8,6 +9,21 @@ let fs = require('fs');
 
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib')
 
+const turkishtoEnglish =  (text) => {
+    return text.replace('Ğ','g')
+        .replace('Ü','U')
+        .replace('Ş','S')
+        .replace('I','I')
+        .replace('İ','I')
+        .replace('Ö','O')
+        .replace('Ç','C')
+        .replace('ğ','g')
+ 		.replace('ü','u')
+        .replace('ş','s')
+        .replace('ı','i')
+        .replace('ö','o')
+        .replace('ç','c');
+};
 
 function capitalizeWords(str) {
     
@@ -18,15 +34,11 @@ function capitalizeWords(str) {
 }
 function capitalizeNames(str) {
 
-    console.log(str)
     let arr = str.split(/\n/).map(element => {
       return element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
     });
     arr = arr.map(element => capitalizeWords(element))
-    console.log(arr)
-    console.log(arr.join('\n'))
-
-    return arr.join('\n')
+    return arr.join(',\n')
 }
 
 const drawText = (page, text, textSize, y_dim, x_dim, font, color, alignment, ) => {
@@ -46,49 +58,58 @@ const drawText = (page, text, textSize, y_dim, x_dim, font, color, alignment, ) 
 }
 
 const createFields = (page, form, title, type, date, authors, citations, y_axis, rowNumber) => {
-    console.log("rowNumber == ", rowNumber)
-    console.log("title == ", title)
-    console.log(" ============= ")
-    console.log(" ")
+
+    // console.log("createFields")
+    // console.log("rowNumber == ", rowNumber)
+    // console.log("title == ", title)
+    // console.log(" ============= ")
+    // console.log(" ")
+    // console.log("createFields\n\n")
+
     const titleField = form.createTextField(`titleField${rowNumber}`)
     titleField.setText(capitalizeWords(title))
     titleField.enableMultiline()
-    titleField.addToPage(page, { x: 30, y: y_axis, width: 235, height: 54 })
+    titleField.addToPage(page, { x: 30, y: y_axis, width: 215, height: 54 })
     titleField.setFontSize(10)
-    titleField.setAlignment(0)
+    titleField.setAlignment(1)
 
     const typeField = form.createTextField(`typeField${rowNumber}`)
     // typeField.enableMultiline()
     type = type === "conference paper" ? "conf. paper" : type
     typeField.setText(capitalizeWords(type))
-    typeField.addToPage(page, { x: 270, y: y_axis, width: 75, height: 54 })
+    typeField.addToPage(page, { x: 250, y: y_axis, width: 65, height: 54 })
     typeField.setFontSize(10)
     typeField.setAlignment(1)
-
-    const dateField = form.createTextField(`dateField${rowNumber}`)
-    dateField.setText(date)
-    dateField.addToPage(page, { x: 350, y: y_axis, width: 35, height: 54 })
-    dateField.setFontSize(10)
-    dateField.setAlignment(1)
 
     const authorsField = form.createTextField(`authorsField${rowNumber}`)
     authorsField.enableMultiline()
     authorsField.setText(capitalizeNames(authors))
-    authorsField.addToPage(page, { x: 390, y: y_axis, width: 150, height: 54 })
+    authorsField.addToPage(page, { x: 320, y: y_axis, width: 120, height: 54 })
     authorsField.setFontSize(10)
     authorsField.setAlignment(1)
 
+    const dateField = form.createTextField(`dateField${rowNumber}`)
+    dateField.setText(date)
+    dateField.addToPage(page, { x: 445, y: y_axis, width: 30, height: 54 })
+    dateField.setFontSize(10)
+    dateField.setAlignment(1)
+
     const citationsField = form.createTextField(`citationsField${rowNumber}`)
     citationsField.setText(citations)
-    citationsField.addToPage(page, { x: 545, y: y_axis, width: 30, height: 54 })
+    citationsField.addToPage(page, { x: 480, y: y_axis, width: 40, height: 54 })
     citationsField.setFontSize(10)
     citationsField.setAlignment(1)
+
+    const indexField = form.createTextField(`indexField${rowNumber}`)
+    indexField.setText('SCIE')
+    indexField.addToPage(page, { x: 525, y: y_axis, width: 40, height: 54 })
+    indexField.setFontSize(10)
+    indexField.setAlignment(1)
 
 }
 
 const renderReportFirstPage = async (reportPDF, products) => {
 
-    const timesRomanFont = await reportPDF.embedFont(StandardFonts.TimesRoman)
     const timesRomanBold = await reportPDF.embedFont(StandardFonts.TimesRomanBold)
 
     const pages = reportPDF.getPages()
@@ -96,27 +117,23 @@ const renderReportFirstPage = async (reportPDF, products) => {
     const page = pages[0]
     const form = reportPDF.getForm()
 
-    // page titles
-    drawText(page, 'Ankara Üniversitesi', 40, 3, 0, timesRomanFont)
-    drawText(page, 'Computer Engineering Department', 30, 4.5, 0, timesRomanFont)
-    drawText(page, 'Academic Products Report', 25, 6, 0, timesRomanFont)
-
     // form
-    drawText(page, 'Title', 14, 8, 40, timesRomanBold)
-    drawText(page, 'Type', 14, 8, 290, timesRomanBold)
-    drawText(page, 'Date', 14, 8, 352, timesRomanBold)
-    drawText(page, 'Authors', 14, 8, 435, timesRomanBold)
-    drawText(page, 'Ciations', 14, 8, 529, timesRomanBold)
+    drawText(page, 'Title', 11, 12, 35, timesRomanBold)
+    drawText(page, 'Type', 11, 12, 255, timesRomanBold)
+    drawText(page, 'Authors', 11, 12, 325, timesRomanBold)
+    drawText(page, 'Year', 11, 12, 445, timesRomanBold)
+    drawText(page, 'Ciations', 11, 12, 480, timesRomanBold)
+    drawText(page, 'Indexed', 11, 12, 525, timesRomanBold)
 
     let rowNumber = 1
-    let y_axis = 530
+    let y_axis = 410
     // first page
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 7; i++) {
         createFields(page, form,
             products[i].title,
             products[i].type,
             products[i].publication_date.toString(),
-            products[i].authors.slice(0, 4).join('\n'),
+            turkishtoEnglish(products[i].authors.slice(0, 4).join('\n')),
             products[i].citations.toString(),
             y_axis-(rowNumber-1)*60,
             rowNumber++
@@ -124,53 +141,79 @@ const renderReportFirstPage = async (reportPDF, products) => {
     }
     form.flatten();
 
-    drawText(page, `1`, 15, 27.5, 290, timesRomanBold)
+    drawText(page, `1`, 12, 27.5, 290, timesRomanBold)
 
 
 }
 
 const renderReportOtherPages = async (reportPDF, products) => {
-    const timesRomanFont = await reportPDF.embedFont(StandardFonts.TimesRoman)
     const timesRomanBold = await reportPDF.embedFont(StandardFonts.TimesRomanBold)
 
+    console.log("products.length === ", products.length)
+    console.log("Math.ceil((products.length - 9) / 12) === ", Math.ceil((products.length - 9) / 12))
     for (let j = 0; j < Math.ceil((products.length - 9) / 12); j++){
 
         const page = reportPDF.addPage()
         const form = reportPDF.getForm()
     
         // form
-        drawText(page, 'Title', 14, 2, 40, timesRomanFont)
-        drawText(page, 'Type', 14, 2, 290, timesRomanFont)
-        drawText(page, 'Date', 14, 2, 352, timesRomanFont)
-        drawText(page, 'Authors', 14, 2, 435, timesRomanFont)
-        drawText(page, 'Ciations', 14, 2, 529, timesRomanFont)
-    
-        form.flatten();
+        drawText(page, 'Title', 11, 2, 35, timesRomanBold)
+        drawText(page, 'Type', 11, 2, 255, timesRomanBold)
+        drawText(page, 'Authors', 11, 2, 325, timesRomanBold)
+        drawText(page, 'Year', 11, 2, 445, timesRomanBold)
+        drawText(page, 'Ciations', 11, 2, 480, timesRomanBold)
+        drawText(page, 'Indexed', 11, 2, 525, timesRomanBold)
+
     
         let rowNumber = 1
         let y_axis = 710
         // first page
-        for (let i = 9 + j * 12; i < products.length; i++) {
+        for (let i = 7 + j * 12; i < 7 + j * 12 + 12 && i < products.length; i++) {
+            console.log(i)
             createFields(page, form,
                 products[i].title,
                 products[i].type,
                 products[i].publication_date.toString(),
-                products[i].authors.slice(0, 4).join('\n'),
+                turkishtoEnglish(products[i].authors.slice(0, 4).join('\n')),
                 products[i].citations.toString(),
-                y_axis-(rowNumber-1)*60,
-                i + j + rowNumber++
+                y_axis-((rowNumber++)-1)*60,
+                i + j
             );       
         }
+        form.flatten();
 
-        drawText(page, `${j+2}`, 15, 27.5, 290, timesRomanBold)
+        drawText(page, `${j+2}`, 12, 27.5, 290, timesRomanBold)
     }
 
 
 }
 
 async function createPdf(products) {
-    
+
     const pdfDoc = await PDFDocument.create()
+    const pngUrl = 'https://upload.wikimedia.org/wikipedia/tr/5/5f/Ankara_%C3%9Cniversitesi_logosu.png'
+    const pngImageBytes = await fetch(pngUrl).then((res) => res.arrayBuffer())
+    const pngImage = await pdfDoc.embedPng(pngImageBytes)
+    const pngDims = pngImage.scale(0.5)
+    const page = pdfDoc.addPage()
+    const timesRomanBold = await pdfDoc.embedFont(StandardFonts.TimesRomanBold)
+
+    // page titles
+    drawText(page, 'ANKARA UNIVERSITY', 14, 2.5, 0, timesRomanBold)
+    drawText(page, 'ENGINEERING FACULTY', 14, 3.25, 0, timesRomanBold)
+    drawText(page, 'DEPARTMENT OF COMPUTER ENGINEERING', 14, 4, 0, timesRomanBold)
+    
+    page.drawImage(pngImage, {
+        x: page.getWidth() / 2 - pngDims.width / 2,
+        y: page.getHeight() - (pngDims.height + 130),
+        width: pngDims.width,
+        height: pngDims.height,
+    })
+    
+    drawText(page, 'ACADEMIC PRODUCTS REPORT', 14, 10.5, 0, timesRomanBold)
+
+    console.log(pngDims.height)
+
     renderReportFirstPage(pdfDoc, products)
     renderReportOtherPages(pdfDoc, products)
     const pdfBytes = await pdfDoc.save()

@@ -44,11 +44,11 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    // indexed_and_abstracted: {
-    //     type: String,
-    //     required: true,
-    //     enum: ['SCI', 'SCIE']
-    // }
+    index: {
+        type: String,
+        required: true,
+        enum: ['SCI', 'SCIE']
+    }
 })
 
 productSchema.set('toJSON', {
@@ -61,6 +61,5 @@ productSchema.set('toJSON', {
 })
 
 productSchema.plugin(uniqueValidator);
-
 
 module.exports = mongoose.model('Product', productSchema)
