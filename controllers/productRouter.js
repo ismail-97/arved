@@ -91,7 +91,7 @@ productRouter.get('/files/:id',
                                 const readstream = gridfsBucket.openDownloadStream(file._id);
                                 response.writeHead(200, {
                                         'Content-Type': 'application/pdf',
-                                        'Content-Disposition':  `${file.filename}`,
+                                        'Content-Disposition':  `document.pdf`,
                                         'Content-Transfer-Encoding': 'Binary'
                                 });
                                 readstream.pipe(response);

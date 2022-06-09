@@ -57,7 +57,7 @@ const drawText = (page, text, textSize, y_dim, x_dim, font, color, alignment, ) 
     })
 }
 
-const createFields = (page, form, title, type, date, authors, citations, y_axis, rowNumber) => {
+const createFields = (page, form, title, type, date, authors, citations, index, y_axis, rowNumber) => {
 
     // console.log("createFields")
     // console.log("rowNumber == ", rowNumber)
@@ -101,7 +101,7 @@ const createFields = (page, form, title, type, date, authors, citations, y_axis,
     citationsField.setAlignment(1)
 
     const indexField = form.createTextField(`indexField${rowNumber}`)
-    indexField.setText('SCIE')
+    indexField.setText(index)
     indexField.addToPage(page, { x: 525, y: y_axis, width: 40, height: 54 })
     indexField.setFontSize(10)
     indexField.setAlignment(1)
@@ -135,6 +135,7 @@ const renderReportFirstPage = async (reportPDF, products) => {
             products[i].publication_date.toString(),
             turkishtoEnglish(products[i].authors.slice(0, 4).join('\n')),
             products[i].citations.toString(),
+            products[i].index,
             y_axis-(rowNumber-1)*60,
             rowNumber++
         );       
@@ -176,6 +177,7 @@ const renderReportOtherPages = async (reportPDF, products) => {
                 products[i].publication_date.toString(),
                 turkishtoEnglish(products[i].authors.slice(0, 4).join('\n')),
                 products[i].citations.toString(),
+                products[i].index,
                 y_axis-((rowNumber++)-1)*60,
                 i + j
             );       
