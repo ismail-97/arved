@@ -90,15 +90,15 @@ async function createPdf(products) {
     drawText(page, 'Academic Products Report', 25, 6, 0, timesRomanFont)
 
     // form
-    drawText(page, 'Title', 14, 9, 40, timesRomanBold)
-    drawText(page, 'Type', 14, 9, 290, timesRomanBold)
-    drawText(page, 'Date', 14, 9, 352, timesRomanBold)
-    drawText(page, 'Authors', 14, 9, 435, timesRomanBold)
-    drawText(page, 'Ciations', 14, 9, 529, timesRomanBold)
+    drawText(page, 'Title', 14, 8, 40, timesRomanBold)
+    drawText(page, 'Type', 14, 8, 290, timesRomanBold)
+    drawText(page, 'Date', 14, 8, 352, timesRomanBold)
+    drawText(page, 'Authors', 14, 8, 435, timesRomanBold)
+    drawText(page, 'Ciations', 14, 8, 529, timesRomanBold)
 
     const form = pdfDoc.getForm()
     let rowNumber = 1
-    let y_axis = 500
+    let y_axis = 530
     products.map((product) => {
         createFields(page, form,
             product.title,
@@ -110,13 +110,35 @@ async function createPdf(products) {
             rowNumber++
         );        
     })
+
+    if (products.length > 9) {
+        rowNumber = 1
+        const page = pdfDoc.addPage()
+        drawText(page, 'Title', 14, 8, 40, timesRomanBold)
+        drawText(page, 'Type', 14, 8, 290, timesRomanBold)
+        drawText(page, 'Date', 14, 8, 352, timesRomanBold)
+        drawText(page, 'Authors', 14, 8, 435, timesRomanBold)
+        drawText(page, 'Ciations', 14, 8, 529, timesRomanBold)     
+        for (let i = 0; i < products.length; i++) {
+            createFields(page, form,
+                product.title,
+                product.type,
+                product.publication_date.toString(),
+                product.authors.slice(0, 3).join('\n'),
+                product.citations.toString(),
+                y_axis-(rowNumber-1)*60,
+                rowNumber++
+            );       
+        }
+    }
+
     // createFields(page, form,
     //     'face detection using AI technology.',
     //     'project',
     //     "2017",
     //     'ismail dewidar\nsherif mostafa\nadnan kashlan',
     //     "85",
-    //     y_axis,
+    //     y_axis-(rowNumber-1)*60,
     //     rowNumber++
     // );
     // createFields(page, form,
@@ -146,7 +168,7 @@ async function createPdf(products) {
     //     y_axis-(rowNumber-1)*60,
     //     rowNumber++
     // );
-    // createFields(page, form,
+    // // createFields(page, form,
     //     'letter recognition using machine learning.',
     //     'conference paper',
     //     "2010",
@@ -249,6 +271,9 @@ adminRouter
                         new RegExp( "^" + body.publisher, 'i') : /.*/,
                     department: adminDepartment
                 })
+                console.log(adminDepartment)
+
+            console.log(products)
             response.status(200).json(products)         
         })
 
@@ -261,11 +286,6 @@ adminRouter
             const products = request.body
             console.log(products)
             const pdfBytes = await createPdf(products)
-            // response.writeHead(200, {
-            //         'Content-Type': 'application/pdf',
-            //         'Content-Disposition': 'attachment; filename=sample.pdf',
-            //         'Content-Transfer-Encoding': 'Binary'
-            // });
             response.end(pdfBytes);
         }) 
 
