@@ -5,14 +5,14 @@ const nodemailer = require('nodemailer')
 const Faculty = require('../models/faculty')
 const Department = require('../models/department')
 
-const transporter = nodemailer.createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-        user: "diana.hoppe45@ethereal.email",
-        pass: '4Ug2quEHaBm4pKNjzJ'
-    }
-})
+// const transporter = nodemailer.createTransport({
+//     host: 'smtp.ethereal.email',
+//     port: 587,
+//     auth: {
+//         user: "diana.hoppe45@ethereal.email",
+//         pass: '4Ug2quEHaBm4pKNjzJ'
+//     }
+// })
 
 const User = require('../models/user')
 const faculty = require('../models/faculty')
@@ -34,24 +34,24 @@ loginRouter.post('/register',
 
         const savedUser = await user.save()
             // email verification
-            jwt.sign(
-                { user: savedUser._id },
-                process.env.EMAIL_SECRET,
-                { expiresIn: '1d' },
-                (error, emailToken) => {
-                    if (error) {
-                        response.status(400)
-                    }
-                    const url = `http://localhost:3001/confirmation/${emailToken}`;
-                    transporter.sendMail({
-                        to: "arvedsystem@outlook.com",
-                        subject: "Confrim Your ARVED account",
-                        html: `<html>
-                        <body> To confim your email click here: <a href= "${url}"> ${url}</a>  </body>
-                        </html>`
-                    })
-                }
-            )
+            // jwt.sign(
+            //     { user: savedUser._id },
+            //     process.env.EMAIL_SECRET,
+            //     { expiresIn: '1d' },
+            //     (error, emailToken) => {
+            //         if (error) {
+            //             response.status(400)
+            //         }
+            //         const url = `http://localhost:3001/confirmation/${emailToken}`;
+            //         transporter.sendMail({
+            //             to: "arvedsystem@outlook.com",
+            //             subject: "Confrim Your ARVED account",
+            //             html: `<html>
+            //             <body> To confim your email click here: <a href= "${url}"> ${url}</a>  </body>
+            //             </html>`
+            //         })
+            //     }
+            // )
         response.status(201).json(savedUser)
     })
 

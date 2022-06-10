@@ -67,7 +67,7 @@ productRouter.post('/',
                         fileID: request.file.id.toString(),
                         url: request.body.url,
                         description: request.body.description,
-                        sciIndx: request.body.sciIndx,
+                        sciIndex: request.body.sciIndex,
                 }
                 const userId = request.userId
                 const product = new Product({...body, user: userId})

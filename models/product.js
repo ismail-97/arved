@@ -44,7 +44,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    index: {
+    sciIndex: {
         type: String,
         required: true,
         enum: ['SCI', 'SCIE']

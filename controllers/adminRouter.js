@@ -135,7 +135,7 @@ const renderReportFirstPage = async (reportPDF, products) => {
             products[i].publication_date.toString(),
             turkishtoEnglish(products[i].authors.slice(0, 4).join('\n')),
             products[i].citations.toString(),
-            products[i].index,
+            products[i].sciIndex,
             y_axis-(rowNumber-1)*60,
             rowNumber++
         );       
@@ -177,7 +177,7 @@ const renderReportOtherPages = async (reportPDF, products) => {
                 products[i].publication_date.toString(),
                 turkishtoEnglish(products[i].authors.slice(0, 4).join('\n')),
                 products[i].citations.toString(),
-                products[i].index,
+                products[i].sciIndex,
                 y_axis-((rowNumber++)-1)*60,
                 i + j
             );       
@@ -230,6 +230,7 @@ adminRouter
             const admin = await User.findOne({ _id: adminId })
             const adminDepartment = admin.department            
             const pendingUsers = await User.find({ status: "pending", department: adminDepartment })
+            console.log(pendingUsers)
             response.json(pendingUsers).status(200)
 })
 
