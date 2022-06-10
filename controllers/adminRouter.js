@@ -170,7 +170,7 @@ const renderReportOtherPages = async (reportPDF, products) => {
         let y_axis = 710
         // first page
         for (let i = 7 + j * 12; i < 7 + j * 12 + 12 && i < products.length; i++) {
-            console.log(i)
+            // console.log(i)
             createFields(page, form,
                 products[i].title,
                 products[i].type,
