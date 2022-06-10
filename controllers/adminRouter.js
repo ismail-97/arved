@@ -128,7 +128,7 @@ const renderReportFirstPage = async (reportPDF, products) => {
     let rowNumber = 1
     let y_axis = 410
     // first page
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 7 && i < products.length; i++) {
         createFields(page, form,
             products[i].title,
             products[i].type,
@@ -152,7 +152,7 @@ const renderReportOtherPages = async (reportPDF, products) => {
 
     console.log("products.length === ", products.length)
     console.log("Math.ceil((products.length - 9) / 12) === ", Math.ceil((products.length - 9) / 12))
-    for (let j = 0; j < Math.ceil((products.length - 9) / 12); j++){
+    for (let j = 0; j < Math.ceil((products.length - 7) / 12); j++){
 
         const page = reportPDF.addPage()
         const form = reportPDF.getForm()
