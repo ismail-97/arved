@@ -14,9 +14,7 @@ const loginMiddleware = (request, response, next) => {
         })
     } else {
         return response.status(401).send('eroor: access denied: token missing')
-    }
-
-    
+    } 
 }
 
 module.exports = loginMiddleware
