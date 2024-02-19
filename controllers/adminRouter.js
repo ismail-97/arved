@@ -323,7 +323,7 @@ adminRouter.post(
     console.log('products === ', products)
     const pdfBytes = await createPdf(products)
     console.log('finished creating pdf')
-    response.end(pdfBytes)
+    response.end({ pdfBytes })
   }
 )
 
