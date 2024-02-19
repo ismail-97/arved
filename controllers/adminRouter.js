@@ -6,6 +6,7 @@ const isVerified = require('../utils/verifiyMiddleware')
 const isAdmin = require('../utils/adminAuthMiddleware')
 const Product = require('../models/product')
 let fs = require('fs')
+const { Buffer } = require('buffer')
 
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib')
 
@@ -320,9 +321,10 @@ adminRouter.post(
   [isAuthenticated, isVerified, isAdmin],
   async (request, response) => {
     const products = request.body
-    console.log('products === ', products)
     const pdfBytes = await createPdf(products)
-    response.end(pdfBytes)
+    const pdfBuffer = Buffer.from(pdfBytes) // Convert Uint8Array to Buffer
+
+    response.end(pdfBuffer)
   }
 )
 
