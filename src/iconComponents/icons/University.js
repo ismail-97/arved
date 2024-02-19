@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 const SvgUniversity = (props) => (
   <svg
@@ -39,6 +39,6 @@ const SvgUniversity = (props) => (
       />
     </g>
   </svg>
-);
+)
 
-export default SvgUniversity;
+export default SvgUniversity

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { getToken } from '../services/token'
 
-const baseUrl = ''
+const baseUrl = 'http://localhost:3001'
 
 const getInfo = async () => {
   const response = await axios.get(`${baseUrl}/user/info`, {

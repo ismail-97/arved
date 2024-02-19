@@ -74,9 +74,9 @@ function App() {
   return (
     <I18nProvider locale={useSelector((state) => state.language)}>
       <Router>
-        <div className="container d-flex">
+        <div className="container d-flex ">
           <Header />
-          <div className="container">
+          <div className="container ">
             {user ? <RoutesAfterLogin /> : <RoutesBeforeLogin />}
           </div>
           <Footer />

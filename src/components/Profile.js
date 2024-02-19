@@ -5,8 +5,6 @@ import { getUserInfo } from '../reducers/userReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import translate from '../i18n/messages/translate'
 
-let i = 0
-
 const UserInfo = () => {
   const dispatch = useDispatch()
   useEffect(() => {
@@ -15,21 +13,21 @@ const UserInfo = () => {
   const user = useSelector((state) => state.user)
   if (user) {
     return (
-      <div className="w-75 text-capitalize userInfo">
+      <div className="text-capitalize">
         <h4 className="title">
           <span>{user.title} </span>
           <span>
             {user.name} {user.surname}
           </span>
         </h4>
-        <h5 className="department">
+        <h5 className="department font-20">
           {' '}
           {translate(`Department of ${user.department}`)}
         </h5>
-        <div className="container p-0">
-          <div className="row w-100 justify-content-start pl-3">
-            {user.fields.map((field) => (
-              <span key={i++} className="field col-6">
+        <div className="container">
+          <div className="row fields">
+            {user.fields.slice(0, 4).map((field) => (
+              <span key={field} className="field col-12 col-sm-6">
                 {field}
               </span>
             ))}
@@ -44,16 +42,17 @@ const UserInfo = () => {
 
 const Profile = () => {
   return (
-    <div className="profile d-flex justify-content-between m-0">
-      <div className="d-flex mx-5 align-items-center">
-        <ProfilePictureIcon />
-        <UserInfo />
-      </div>
-      <div className="my-3 mr-5">
-        <button className="d-flex arved-button2 align-items-center">
-          <EditProfileIcon className="mx-1" />
-          {translate(`edit`)}
-        </button>
+    <div className="profile d-flex justify-content-between m-auto ">
+      <div className="d-flex w-100 ">
+        <ProfilePictureIcon className="profile-photo" />
+        <div className="userInfo">
+          <UserInfo className="" />
+
+          <button className="d-flex arved-button2 align-items-center">
+            <EditProfileIcon className="mx-1" />
+            {translate(`edit`)}
+          </button>
+        </div>
       </div>
     </div>
   )

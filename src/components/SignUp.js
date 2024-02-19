@@ -79,11 +79,11 @@ const SignUp = () => {
         <div className="product-text">Sign Up</div>
         <Form
           onSubmit={signUp}
-          className="justify-content-around text-capitalize product-form p-5"
+          className="justify-content-around text-capitalize product-form py-5 px-sm-3 px-md-5"
         >
           <Container className="d-flex flex-column align-items-center">
             <Row className="w-100 justify-content-between">
-              <Col className="col-6">
+              <Col className="col-12 col-md-6">
                 <NameInputGroup />
                 <SurnameInputGroup />
                 {/* <AcademicIdInputGroup /> */}
@@ -92,7 +92,7 @@ const SignUp = () => {
                 <PasswordInputGroup />
                 <RepeatedPasswordInputGroup />
               </Col>
-              <Col className="col-6">
+              <Col className="col-12 col-md-6">
                 <AcademicTitleInputGroup />
                 <FacultyInputGroup />
                 <DepartmentInputGroup />
