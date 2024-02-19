@@ -23,10 +23,10 @@ const LoginForm = () => {
   return (
     <Form
       onSubmit={signIn}
-      className="d-flex flex-column align-items-center text-capitalize"
+      className="d-flex flex-column align-items-center text-capitalize p-0 m-0"
     >
-      <p className="arved-text m-0 ">ARVED</p>
-      <InputGroup className="mb-4 w-75 d-flex flex-row-reverse align-items-center arved-input-group">
+      <p className="arved-text my-0 p-0 ">ARVED</p>
+      <InputGroup className="mb-4 w-75 d-flex flex-row-reverse align-items-center arved-input-group ">
         <FormattedMessage id="email">
           {(placeholder) => (
             <Form.Control
