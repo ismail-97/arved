@@ -21,6 +21,7 @@ userRouter.put(
     const body = request.body
     const updatedUser = await User.findByIdAndUpdate(request.userId, body, {
       new: true,
+      runValidators: true,
     })
     response.status(200).json(updatedUser)
   }
