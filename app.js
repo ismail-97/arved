@@ -2,6 +2,7 @@ const path = require('path')
 
 const express = require('express')
 const app = express()
+
 require('express-async-errors')
 const cors = require('cors')
 const methodOverride = require('method-override')
@@ -30,6 +31,10 @@ mongoose
   .catch((error) => {
     logger.error('error connecting to MongoDB:', error.message)
   })
+
+app.get('/health', (req, res) => {
+  res.status(200).send('OK')
+})
 
 // implemented before calling route handlers
 app.use(cors({ exposedHeaders: ['Content-Disposition'] }))

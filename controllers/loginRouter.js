@@ -4,15 +4,9 @@ const loginRouter = require('express').Router()
 const nodemailer = require('nodemailer')
 const Faculty = require('../models/faculty')
 const Department = require('../models/department')
-
-// const transporter = nodemailer.createTransport({
-//     host: 'smtp.ethereal.email',
-//     port: 587,
-//     auth: {
-//         user: "diana.hoppe45@ethereal.email",
-//         pass: '4Ug2quEHaBm4pKNjzJ'
-//     }
-// })
+const isAuthenticated = require('../utils/loginMiddleware')
+const isVerified = require('../utils/verifiyMiddleware')
+const { google } = require('googleapis')
 
 const User = require('../models/user')
 const faculty = require('../models/faculty')
@@ -22,6 +16,12 @@ loginRouter.post('/register', async (request, response) => {
   const body = request.body
   const { password } = body
   // console.log(body)
+  if (!password || password.length < 8) {
+    return response
+      .status(400)
+      .json({ error: 'Password must be at least 8 characters long' })
+  }
+
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
   const user = new User({
@@ -55,6 +55,24 @@ loginRouter.post('/register', async (request, response) => {
   response.status(201).json(savedUser)
 })
 
+// // edit user info
+// loginRouter.put(
+//   '/edit-user',
+//   [isAuthenticated, isVerified],
+//   async (request, response) => {
+//     const { email, fields } = request.body
+//     console.log('email === ', email)
+//     const userId = request.userId
+//     console.log('userID == ', userId)
+//     const updatedUser = await User.findByIdAndUpdate(
+//       userId,
+//       { email: email, fields: fields },
+//       { runValidators: true }
+//     )
+//     response.status(200).json(updatedUser)
+//   }
+// )
+
 // confirming email
 loginRouter.get('/confirmation/:token', async (request, response) => {
   jwt.verify(
@@ -85,7 +103,7 @@ loginRouter.post('/login', async (request, response) => {
 
   if (!(user && passwordCorrect)) {
     return response.status(401).json({
-      error: 'invalid username or password',
+      error: 'invalid credentials',
     })
   }
 
@@ -102,31 +120,31 @@ loginRouter.post('/login', async (request, response) => {
     isVerified: user.isVerified,
     role: user.role,
     department: user.department,
+    faculty: user.faculty,
+    email: user.email,
+    orcid: user.orcid,
+    fields: user.fields,
   })
   // response
 })
 
 // for forgot password (takes a user email & creates a link for changing password and sends it that email)
-loginRouter.post('/forgot-password', async (request, response) => {
+loginRouter.post('/send-password-link', async (request, response) => {
   const { email } = request.body
-  User.findOne({ email: email }, (err, user) => {
-    if (err || !user) {
-      return response.status(400).send('user with this email does not exist')
-    }
-    const userToken = jwt.sign(
-      { user: user._id },
-      process.env.FORGOT_PASSWORD_SECRET,
-      { expiresIn: '15m' }
-    )
+  // console.log(request.body)
 
-    const url = `http://localhost:3001/reset-password/${userToken}`
-    transporter.sendMail({
-      to: 'ismailkamaleldin@gmail.com',
-      subject: 'change Your ARVED password',
-      html: `To change your password click here: <a href= "${url}"> ${url}</a>`,
-    })
-    response.status(200).send({ userToken })
-  })
+  // User.findOne({ email: email }, async (err, user) => {
+  //   if (err || !user) {
+  //     return response.status(400).send('user with this email does not exist')
+  //   }
+  //   const userToken = jwt.sign(
+  //     { user: user._id },
+  //     process.env.FORGOT_PASSWORD_SECRET,
+  //     { expiresIn: '15m' }
+  //   )
+
+  //   sendEmail(email, userToken)
+  response.status(200)
 })
 
 // for reset password (creates a link and sends it to user email)
