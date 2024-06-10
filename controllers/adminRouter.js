@@ -75,13 +75,6 @@ const createFields = (
   y_axis,
   rowNumber
 ) => {
-  // console.log("createFields")
-  // console.log("rowNumber == ", rowNumber)
-  // console.log("title == ", title)
-  // console.log(" ============= ")
-  // console.log(" ")
-  // console.log("createFields\n\n")
-
   const titleField = form.createTextField(`titleField${rowNumber}`)
   titleField.setText(capitalizeWords(title))
   titleField.enableMultiline()
@@ -164,11 +157,6 @@ const renderReportFirstPage = async (reportPDF, products) => {
 const renderReportOtherPages = async (reportPDF, products) => {
   const timesRomanBold = await reportPDF.embedFont(StandardFonts.TimesRomanBold)
 
-  console.log('products.length === ', products.length)
-  console.log(
-    'Math.ceil((products.length - 9) / 12) === ',
-    Math.ceil((products.length - 9) / 12)
-  )
   for (let j = 0; j < Math.ceil((products.length - 7) / 12); j++) {
     const page = reportPDF.addPage()
     const form = reportPDF.getForm()
@@ -185,7 +173,6 @@ const renderReportOtherPages = async (reportPDF, products) => {
     let y_axis = 710
     // first page
     for (let i = 7 + j * 12; i < 7 + j * 12 + 12 && i < products.length; i++) {
-      // console.log(i)
       createFields(
         page,
         form,
@@ -229,8 +216,6 @@ async function createPdf(products) {
 
   drawText(page, 'ACADEMIC PRODUCTS REPORT', 14, 10.5, 0, timesRomanBold)
 
-  console.log(pngDims.height)
-
   renderReportFirstPage(pdfDoc, products)
   renderReportOtherPages(pdfDoc, products)
   const pdfBytes = await pdfDoc.save()
@@ -248,7 +233,6 @@ adminRouter.get(
       status: 'pending',
       department: adminDepartment,
     })
-    console.log(pendingUsers)
     response.json(pendingUsers).status(200)
   }
 )
@@ -276,7 +260,6 @@ adminRouter.get(
     const adminDepartment = admin.department
     let departmentUsers = await User.find({ department: adminDepartment })
     departmentUsers = departmentUsers.filter((user) => user.id !== adminId)
-    console.log(departmentUsers)
     response.json(departmentUsers).status(200)
   }
 )
