@@ -67,10 +67,10 @@ const AddProduct = () => {
 
   return (
     <div className="product-page">
-      <div className="product-text">Add An Academic Product</div>
+      <div className="form-text">Add An Academic Product</div>
       <Form
         onSubmit={addItem}
-        className="justify-content-around text-capitalize product-form py-4 px-sm-3 px-md-5"
+        className="justify-content-around text-capitalize form py-4 px-sm-3 px-md-5"
       >
         <Container className="d-flex flex-column align-items-center">
           <Row className="w-100 justify-content-between">

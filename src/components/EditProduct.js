@@ -65,19 +65,20 @@ const EditProduct = () => {
   const onChangeFile = (event) => {
     setFile(event.target.files[0])
   }
+
   return (
     <div className="product-page ">
-      <div className="product-text">Edit An Academic Product</div>
+      <div className="form-text">Edit An Academic Product</div>
       <Form
         onSubmit={editItem}
-        className="justify-content-around text-capitalize product-form  py-4 px-sm-3 px-md-5"
+        className="justify-content-around text-capitalize form  py-4 px-sm-3 px-md-5"
       >
         <Container className="d-flex flex-column align-items-center">
           <Row className="w-100 justify-content-between">
             <Col className="col-12 col-md-6">
               <TitleInputGroup defaultValue={product.title} />
               <TypeInputGroup defaultValue={product.type} />
-              <AuthorsInputGroup iconsNo={1} defaultValues={product.authors} />
+              <AuthorsInputGroup authors={product.authors} />
               <DateInputGroup
                 name="publication_date"
                 id={'publication date'}

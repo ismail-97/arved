@@ -3,7 +3,7 @@ import { getToken } from '../services/token'
 import { saveAs } from 'filesaver.js-npm'
 const FormData = require('form-data')
 
-const baseUrl = 'http://localhost:3001/user/products'
+const baseUrl = '/user/products'
 
 const getProducts = async () => {
   const response = await axios.get(`${baseUrl}`, {
@@ -13,7 +13,7 @@ const getProducts = async () => {
 }
 const getProductsReport = async (products) => {
   const response = axios
-    .post(`http://localhost:3001/admin/filter/create-pdf`, products, {
+    .post(`/admin/filter/create-pdf`, products, {
       responseType: 'arraybuffer',
       headers: {
         Authorization: getToken(),
@@ -95,11 +95,9 @@ const deleteAProduct = async (productId) => {
 }
 
 const searchProducts = async (criteria) => {
-  const response = await axios.post(
-    `http://localhost:3001/admin/filter`,
-    criteria,
-    { headers: { Authorization: getToken() } }
-  )
+  const response = await axios.post(`/admin/filter`, criteria, {
+    headers: { Authorization: getToken() },
+  })
   return response.data
 }
 

@@ -4,6 +4,7 @@ import EditProfileIcon from '../iconComponents/icons/EditProfile'
 import { getUserInfo } from '../reducers/userReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import translate from '../i18n/messages/translate'
+import { useNavigate } from 'react-router-dom'
 
 const UserInfo = () => {
   const dispatch = useDispatch()
@@ -41,14 +42,19 @@ const UserInfo = () => {
 }
 
 const Profile = () => {
+  const navigate = useNavigate()
+
   return (
     <div className="profile d-flex justify-content-between m-auto ">
       <div className="d-flex w-100 ">
         <ProfilePictureIcon className="profile-photo" />
-        <div className="userInfo">
+        <div className="userInfo pl-2 pl-md-0">
           <UserInfo className="" />
 
-          <button className="d-flex arved-button2 align-items-center">
+          <button
+            className="d-flex arved-button2 align-items-center mr-1 mr-sm-3"
+            onClick={() => navigate('/edit-account')}
+          >
             <EditProfileIcon className="mx-1" />
             {translate(`edit`)}
           </button>

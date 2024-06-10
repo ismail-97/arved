@@ -1,5 +1,7 @@
 import axios from 'axios'
-const baseUrl = 'http://localhost:3001'
+// import { getToken } from '../services/token'
+
+const baseUrl = ''
 
 const login = async (credentials) => {
   const response = await axios.post(`${baseUrl}/login`, credentials)
@@ -11,6 +13,11 @@ const register = async (userInfo) => {
   return response
 }
 
+const sendPasswordLink = async (email) => {
+  const response = await axios.post(`${baseUrl}/send-password-link`, email)
+
+  return response.data
+}
 const getFaculties = async () => {
   const response = await axios.get(`${baseUrl}/faculties`)
   return response.data
@@ -23,5 +30,11 @@ const getDepartments = async (faculty) => {
   })
   return response.data
 }
-const loginService = { login, register, getFaculties, getDepartments }
+const loginService = {
+  login,
+  register,
+  getFaculties,
+  getDepartments,
+  sendPasswordLink,
+}
 export default loginService

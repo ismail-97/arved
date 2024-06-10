@@ -7,17 +7,17 @@ import { loggedUser } from '../reducers/loginReducer'
 import translate from '../i18n/messages/translate'
 import { FormattedMessage } from 'react-intl'
 import { useNavigate } from 'react-router-dom'
+import Notification from './Notification'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
   const signIn = (event) => {
     event.preventDefault()
     const email = event.target.username.value
     const password = event.target.password.value
     dispatch(loggedUser({ email, password }))
-    event.target.username.value = ''
-    event.target.password.value = ''
   }
 
   return (
@@ -26,6 +26,7 @@ const LoginForm = () => {
       className="d-flex flex-column align-items-center text-capitalize p-0 m-0"
     >
       <p className="arved-text my-0 p-0 ">ARVED</p>
+      <Notification time="5000" type="error" />
       <InputGroup className="mb-4 w-75 d-flex flex-row-reverse align-items-center arved-input-group ">
         <FormattedMessage id="email">
           {(placeholder) => (
@@ -61,10 +62,9 @@ const LoginForm = () => {
         <a href="/register">
           <p className="mb-3 new-account-text "> {translate('new-account')}</p>
         </a>
-        <p className="forgot-password-text">
-          {' '}
-          <a href="#">{translate('forgot-password')}</a>
-        </p>
+        {/* <p className="forgot-password-text">
+          <a href="/forget-password">{translate('forgot-password')}</a>
+        </p> */}
       </Form.Group>
     </Form>
   )

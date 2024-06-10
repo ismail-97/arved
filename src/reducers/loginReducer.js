@@ -1,66 +1,92 @@
 import loginService from '../services/login'
-import {setToken} from '../services/token'
+import { setToken } from '../services/token'
+
+import { setNotification } from './notificationReducer'
 
 const user = null
 const loginReducer = (state = user, action) => {
-    switch (action.type){
-        case 'LOGIN':
-            return action.data
-        case 'REGISTER':
-            return action.data
-        case 'CLEAR':
-            return null 
-        default: return state
-    }
+  switch (action.type) {
+    case 'LOGIN':
+      return action.data
+    case 'REGISTER':
+      return action.data
+    case 'CLEAR':
+      return null
+    default:
+      return state
+  }
 }
 
-export const loggedUser = ({email, password}) => {
-    return async dispatch => {
-        try {
-            const user = await loginService.login({ email: email, password: password })
-            setToken(user.token)
-            window.localStorage.setItem('userInfo', JSON.stringify(user))
-            dispatch({
-                type: 'LOGIN',
-                data: user
-            })
-        } catch (error) {
-            //implement a notification for this part
-            console.log("your email or your password is not correct")
-        }
+export const loggedUser = ({ email, password }) => {
+  return async (dispatch) => {
+    try {
+      const user = await loginService.login({
+        email: email,
+        password: password,
+      })
+      setToken(user.token)
+      window.localStorage.setItem('userInfo', JSON.stringify(user))
+      dispatch({
+        type: 'LOGIN',
+        data: user,
+      })
+    } catch (error) {
+      //implement a notification for this part
+      dispatch(setNotification('Invalid email or password'))
     }
+  }
 }
 
-export const preLoggedUser = user => {
-    return async dispatch => {
-        dispatch ({
-            type: 'LOGIN',
-            data: user
-        })
-    }
+export const preLoggedUser = (user) => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'LOGIN',
+      data: user,
+    })
+  }
 }
 
 export const registerUser = (newUser) => {
-    return async dispatch => {
-        try {
-            await loginService.register(newUser)
-            dispatch({
-                type: 'REGISTER',
-                data: null
-            })
-        } catch (error) {
-            //implement a notification for this part
-            console.log("ERROR WHILE SIGNING UP")
-            throw error
-        }
+  return async (dispatch) => {
+    try {
+      await loginService.register(newUser)
+      dispatch({
+        type: 'REGISTER',
+        data: null,
+      })
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else {
+        throw new Error('An unknown error occurred.')
+      }
     }
+  }
 }
 
 export const clearLoginInfo = () => {
-    return async dispatch => {
-        dispatch ({
-            type: 'CLEAR'
-        })
-    }    
+  return async (dispatch) => {
+    dispatch({
+      type: 'CLEAR',
+    })
+  }
 }
+
+export const sendPasswordLink = (email) => {
+  return async () => {
+    try {
+      console.log(email)
+
+      await loginService.sendPasswordLink({ email: email })
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else {
+        console.log(error)
+        throw new Error('An unknown error occurred.')
+      }
+    }
+  }
+}
+
 export default loginReducer

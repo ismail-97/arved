@@ -1,1 +1,1 @@
-export { default as ProfilePicrtureSmall } from "./ProfilePicrtureSmall";
+export { default as RejectIcon } from "./RejectIcon";

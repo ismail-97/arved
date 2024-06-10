@@ -31,9 +31,9 @@ const Header = () => {
         : { display: 'none' }
   else viewWhenApproved = { display: 'none' }
 
-  const logout = () => {
+  const logout = async () => {
     window.localStorage.clear()
-    dispatch(clearLoginInfo())
+    await dispatch(clearLoginInfo())
     navigate('/')
     window.location.reload()
   }

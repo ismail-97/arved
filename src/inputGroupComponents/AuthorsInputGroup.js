@@ -1,98 +1,100 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 import { Form, InputGroup } from 'react-bootstrap'
 import { FormattedMessage } from 'react-intl'
 import AuthorIcon from '../iconComponents/icons/AuthorIcon'
 import AddIcon from '../iconComponents/icons/AddIcon'
-// import MultiAuthorsInputGroup from '../inputGroupComponents/MultiAuthorsInputGroup'
 import RemoveIcon from '../iconComponents/icons/RemoveIcon'
+import { v4 as uuidv4 } from 'uuid'
 
-let i = 0
-let firstRendering = true
-let defaultAuthors = []
-const AuthorsInputGroup = ({ iconsNo, defaultValues }) => {
+const AuthorsInputGroup = (props) => {
+  const [authors, setAuthors] = useState(
+    props.authors
+      ? props.authors.map((author) => ({ id: uuidv4(), value: author }))
+      : [{ id: uuidv4(), value: '' }]
+  )
 
-    const [authors, setAuthors] = useState([])
-    const [values, setValues] = useState([])
-    
-    //handleing default values
-    if (defaultValues && firstRendering) {
-        setValues(values.concat(defaultValues))
+  const addAuthor = () => {
+    setAuthors([...authors, { id: uuidv4(), value: '' }])
+  }
 
-        for (let j = 0; j < defaultValues.length - 1; j++)
-            defaultAuthors = defaultAuthors.concat(i++)
-        setAuthors(authors.concat(defaultAuthors))
+  const deleteAuthor = (id) => {
+    setAuthors(authors.filter((author) => author.id !== id))
+  }
 
-        firstRendering = false
-    }
-
-    const addAuthor = () => {
-        setAuthors(authors.concat(i++))
-        setValues(values.concat(""))
-    }
-
-    const deleteAuthor = (index) => {
-        setAuthors([].concat(authors.slice(0, index), authors.slice(index + 1)))
-        setValues([].concat(values.slice(0, index), values.slice(index + 1)))
-    } 
-
-    return (
-        <div>
-            <InputGroup className="arved-input-group">
-                <button
-                    type="button"
-                    className="no-style"
-                    onClick={addAuthor} >
-                    <AddIcon />
-                </button>
-                <FormattedMessage id="author" >
-                    {placeholder => <Form.Control  
-                        className= "arved-input-label2 label-with-2-icons text-capitalize"
-                        type="text"
-                        name="authors"
-                        placeholder={placeholder}
-                        defaultValue={defaultValues && defaultValues.length > 0 ? defaultValues[0] : ''}
-                        // required
-                    />
-                    }
-                </FormattedMessage>
-                <AuthorIcon/>
-            </InputGroup>
-            <MultiAuthorsInputGroup
-                authors={authors}
-                deleteAuthor={deleteAuthor}
-                defaultValues={values.slice(1)} />
-        </div>
+  const handleAuthorChange = (id, value) => {
+    setAuthors(
+      authors.map((author) =>
+        author.id === id ? { ...author, value } : author
+      )
     )
+  }
+
+  return (
+    <div>
+      <InputGroup className="arved-input-group">
+        <button type="button" className="no-style" onClick={addAuthor}>
+          <AddIcon />
+        </button>
+        <FormattedMessage id="author">
+          {(placeholder) => (
+            <Form.Control
+              className="arved-input-label2 label-with-2-icons text-capitalize"
+              type="text"
+              name="authors"
+              placeholder={placeholder}
+              required
+              value={authors[0]?.value || ''}
+              onChange={(e) =>
+                handleAuthorChange(authors[0]?.id, e.target.value)
+              }
+            />
+          )}
+        </FormattedMessage>
+        <AuthorIcon />
+      </InputGroup>
+      <MultiAuthorsInputGroup
+        authors={authors.slice(1)}
+        deleteAuthor={deleteAuthor}
+        handleAuthorChange={handleAuthorChange}
+      />
+    </div>
+  )
 }
 
-const MultiAuthorsInputGroup = ({ authors, deleteAuthor, defaultValues }) => {
-
-    return (
-        <div>
-            {authors.map(author =>
-                <InputGroup className="arved-input-group" key={author}>
-                    <button
-                        type="button"
-                        className="no-style"
-                        onClick={() => deleteAuthor(authors.indexOf(author))} >
-                        <RemoveIcon />
-                    </button>
-                    <FormattedMessage id="author" >
-                        {placeholder => <Form.Control  
-                            className= "arved-input-label2 label-with-2-icons"
-                            type="text"
-                            name="authors"
-                            placeholder={placeholder} 
-                            required
-                            defaultValue={defaultValues[authors.indexOf(author)]}
-                        />
-                        }
-                    </FormattedMessage>
-                    <AuthorIcon/>
-                </InputGroup>       
-            )}  
-        </div>    
-    )
+const MultiAuthorsInputGroup = ({
+  authors,
+  deleteAuthor,
+  handleAuthorChange,
+}) => {
+  return (
+    <div>
+      {authors.map(({ id, value }) => (
+        <InputGroup className="arved-input-group" key={id}>
+          <button
+            type="button"
+            className="no-style"
+            onClick={() => deleteAuthor(id)}
+          >
+            <RemoveIcon />
+          </button>
+          <FormattedMessage id="author">
+            {(placeholder) => (
+              <Form.Control
+                className="arved-input-label2 label-with-2-icons"
+                type="text"
+                name="authors"
+                placeholder={placeholder}
+                required
+                value={value}
+                onChange={(e) => handleAuthorChange(id, e.target.value)}
+              />
+            )}
+          </FormattedMessage>
+          <AuthorIcon />
+        </InputGroup>
+      ))}
+    </div>
+  )
 }
 export default AuthorsInputGroup

@@ -53,10 +53,10 @@ const SearchForm = () => {
   return (
     <div>
       <div className="product-page m-auto">
-        <div className="product-text mb-2">search</div>
+        <div className="form-text mb-2">search</div>
         <Form
           onSubmit={searchProducts}
-          className="justify-content-around text-capitalize product-form mb-3 py-5 px-sm-3 px-lg-5"
+          className="justify-content-around text-capitalize form mb-3 py-5 px-sm-3 px-lg-5"
         >
           <Container className="d-flex flex-column align-items-center">
             <Row className="w-100 justify-content-between">

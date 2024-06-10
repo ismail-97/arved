@@ -106,6 +106,12 @@ body {
   color: #28a745;
   background-color: transparent;
 }
+
+.arved-input-label2:disabled {
+  background-color: #ffffff;
+  opacity: 50%;
+}
+
 .arved-input-label:focus {
   box-shadow: none;
   outline: 0;
@@ -318,11 +324,11 @@ body {
   width: 70%;
   margin: 90px auto;
 }
-.product-form {
+.form {
   background-color: #ffffff;
   border: 1px solid #707070;
 }
-.product-text {
+.form-text {
   margin-left: 20px;
   margin-bottom: 5px;
   color: #134383;
@@ -369,6 +375,10 @@ body {
   color: #134383;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
+}
+
+.field-12-arial {
+  font-size: 12px;
 }
 
 .field-12-bold-arial {
@@ -545,6 +555,11 @@ input[type='file']::-webkit-file-upload-button {
 .reject-button {
   color: #820a0a;
 }
+
+.reject-button-text,
+.accept-button-text {
+}
+
 .no-style:focus {
   outline: 0;
   border: 0;
@@ -632,7 +647,7 @@ li span {
     width: 90%;
     background-color: #007bff;
   }
-  .product-text {
+  .form-text {
     margin-left: 0px;
     font-size: 24px;
   }
@@ -640,6 +655,11 @@ li span {
   .product-page {
     width: 90%;
   }
+}
+
+.reject-button-icon,
+.accept-button-icon {
+  display: none;
 }
 
 @media only screen and (max-width: 576px) {
@@ -663,12 +683,54 @@ li span {
     font-size: 14px;
   }
 
-  .product-text {
+  .form-text {
     font-size: 24px;
   }
 
   .product-page {
     width: 90%;
+  }
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 60px;
+  font-size: 10px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%; /* Position the tooltip above the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.reject-button-icon:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  background-color: #820a0a;
+}
+
+.accept-button-icon:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+  background-color: #0d7a1c;
+}
+
+@media only screen and (max-width: 480px) {
+  .reject-button-text,
+  .accept-button-text {
+    display: none;
+  }
+
+  .reject-button-icon,
+  .accept-button-icon {
+    display: block;
   }
 }
 
@@ -681,7 +743,7 @@ li span {
     display: none;
   }
 
-  .product-text {
+  .form-text {
     font-size: 18px;
   }
 
@@ -694,4 +756,11 @@ li span {
     font-size: 80px;
     /* width: fit-content; */
   }
+
+  .pending_account_profile_photo {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 360px) {
 }

@@ -4,6 +4,7 @@ import Login from './components/Login'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Content from './components/Content'
+import EditAccount from './components/EditAccount'
 import AddProdcut from './components/AddProdcut'
 import EditProdcut from './components/EditProduct'
 import Verification from './components/Verification'
@@ -28,6 +29,7 @@ const RoutesAfterLogin = () => {
   const user = useSelector((state) => state.loginInfo)
   return (
     <Routes>
+      <Route path="/edit-account" element={<EditAccount />} />
       <Route path="/add-product" element={<AddProdcut />} />
       <Route path="/edit-product" element={<EditProdcut />} />
       {user.role === 'admin' && (
@@ -54,7 +56,7 @@ const RoutesBeforeLogin = () => {
       <Route path="/register" element={<SignUp />} />
       <Route path="/verification" element={<Verification />} />
       <Route path="/" element={<Login />} />
-      {/* { !user && <Route path="*" element={<Navigate replace to="/" />} /> } */}
+      <Route path="*" element={<Navigate replace to="/" />} />
     </Routes>
   )
 }

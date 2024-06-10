@@ -2,22 +2,24 @@ import React, { useState } from 'react'
 import { Form, Container, Row, Col, Button } from 'react-bootstrap'
 
 import translate from '../i18n/messages/translate'
-import { FormattedMessage } from 'react-intl'
 
 import NameInputGroup from '../inputGroupComponents/NameInputGroup'
 import SurnameInputGroup from '../inputGroupComponents/SurnameInputGroup'
-import AcademicIdInputGroup from '../inputGroupComponents/AcademicIdInputGroup'
 import EmailInputGroup from '../inputGroupComponents/EmailInputGroup'
 import PasswordInputGroup from '../inputGroupComponents/PasswordInputGroup'
 import RepeatedPasswordInputGroup from '../inputGroupComponents/RepeatedPasswordInputGroup'
+import Passwords from '../inputGroupComponents/Passwords'
 import AcademicTitleInputGroup from '../inputGroupComponents/AcademicTitleInputGroup'
 import ORCIDInputGroup from '../inputGroupComponents/ORCIDInputGroup'
 import FacultyInputGroup from '../inputGroupComponents/FacultyInputGroup'
 import DepartmentInputGroup from '../inputGroupComponents/DepartmentInputGroup'
 import FieldsOfStudyInputGroup from '../inputGroupComponents/FieldsOfStudyInputGroup'
 import ModalMessage from '../components/ModalMessage'
+import Notification from './Notification'
 
 import { registerUser } from '../reducers/loginReducer'
+import { setNotification } from '../reducers/notificationReducer'
+
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -28,10 +30,9 @@ const SignUp = () => {
 
   const signUp = async (event) => {
     event.preventDefault()
-    const fields = []
-    Array.from(event.target.studyFields).map((input) =>
-      fields.push(input.value)
-    )
+
+    const formData = new FormData(event.target)
+    const fields = formData.getAll('studyFields')
 
     try {
       await dispatch(
@@ -39,7 +40,6 @@ const SignUp = () => {
           name: event.target.name.value,
           surname: event.target.surname.value,
           orcid: event.target.orcid.value,
-          // academicId: event.target.AcademicID.value,
           email: event.target.email.value,
           password: event.target.password.value,
           title: event.target.academicTitle.value,
@@ -54,19 +54,12 @@ const SignUp = () => {
       }, 5000)
     } catch (error) {
       console.log(error)
-      console.log('error in sign up')
+      dispatch(setNotification(error.message))
     }
   }
   return (
     <div className="product-page d-flex w-100 justify-content-center">
       <ModalMessage
-        // show={modalShow}
-        // onHide={() => setModalShow(true)}
-        // header={translate("successfullRegisterationHeader")}
-        // body={translate("successfullRegisterationBody")}
-        // footer={translate("successfullRegisterationFooter")}
-        // footertype='sentence'
-        // button=''
         show={modalShow}
         onHide={() => setModalShow(true)}
         header={translate('pendingModalHeader')}
@@ -76,21 +69,21 @@ const SignUp = () => {
         button="Log Out"
       />
       <div>
-        <div className="product-text">Sign Up</div>
+        <div className="form-text">Sign Up</div>
+        <Notification time="5000" type="error" />
+
         <Form
           onSubmit={signUp}
-          className="justify-content-around text-capitalize product-form py-5 px-sm-3 px-md-5"
+          className="justify-content-around text-capitalize form py-5 px-sm-3 px-md-5"
         >
           <Container className="d-flex flex-column align-items-center">
             <Row className="w-100 justify-content-between">
               <Col className="col-12 col-md-6">
                 <NameInputGroup />
                 <SurnameInputGroup />
-                {/* <AcademicIdInputGroup /> */}
                 <ORCIDInputGroup />
                 <EmailInputGroup />
-                <PasswordInputGroup />
-                <RepeatedPasswordInputGroup />
+                <Passwords />
               </Col>
               <Col className="col-12 col-md-6">
                 <AcademicTitleInputGroup />
