@@ -21,7 +21,7 @@ const productSchema = new mongoose.Schema({
     validate: {
       validator: (value) => {
         const currentYear = new Date().getFullYear()
-        return value > 1900 && value < currentYear
+        return value > 1900 && value <= currentYear
       },
       message: (props) =>
         `Publication date ${props.value} is not between 1900 and the current year.`,
