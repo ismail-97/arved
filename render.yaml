@@ -1,0 +1,16 @@
+# render.yaml
+
+services:
+  - type: web
+    name: my-web-service
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    plan: free
+    # Add other web service settings as needed
+
+jobs:
+  - name: Keep Service Awake
+    schedule: '@every 10m'
+    type: curl
+    command: curl -s -o /dev/null https://arved-system.onrender.com/
