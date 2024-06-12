@@ -50,7 +50,7 @@ app.use('/admin', adminRouter)
 app.use('/user', userRouter)
 app.use('/user/products', productRouter)
 app.get('/*', function (req, res) {
-  res.sendFile(path.resolve(__dirname + '/build/index.html'))
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
 
 // implemented after calling route handlers

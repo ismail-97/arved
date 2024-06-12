@@ -292,7 +292,15 @@ adminRouter.post(
         body.type && body.type !== 'All'
           ? new RegExp(`${body.type}+`, 'i')
           : /.*/,
-      authors: body.authors ? new RegExp(`${body.authors}+`, 'i') : /.*/,
+      // authors: body.authors ? new RegExp(`${body.authors}+`, 'i') : /.*/,
+      authors:
+        body.authors && body.authors.some((author) => author)
+          ? {
+              $in: authors
+                .filter((author) => author)
+                .map((author) => new RegExp(author, 'i')),
+            }
+          : /.*/,
       publisher: body.publisher ? new RegExp(`${body.publisher}+`, 'i') : /.*/,
     })
     response.status(200).json(products)
