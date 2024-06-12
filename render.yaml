@@ -7,7 +7,6 @@ services:
     buildCommand: npm install
     startCommand: npm start
     plan: free
-    # Add other web service settings as needed
 
 jobs:
   - name: Keep Service Awake
