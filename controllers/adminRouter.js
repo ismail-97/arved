@@ -7,8 +7,44 @@ const isAdmin = require('../utils/adminAuthMiddleware')
 const Product = require('../models/product')
 let fs = require('fs')
 const { Buffer } = require('buffer')
-
+const Grid = require('gridfs-stream')
+const { GridFSBucket } = require('mongodb')
+const crypto = require('crypto')
+const mongoose = require('mongoose')
+const config = require('../utils/config')
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib')
+const { GridFsStorage } = require('multer-gridfs-storage')
+const multer = require('multer')
+
+let gfs, gridfsBucket
+mongoose.connection.once('open', () => {
+  gridfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+    bucketName: 'uploads',
+  })
+  gfs = Grid(mongoose.connection.db, mongoose.mongo)
+  gfs.collection('uploads')
+})
+
+const storage = new GridFsStorage({
+  url: config.MONGODB_URI,
+  file: (req, file) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err)
+        }
+        const filename = file.originalname
+        const fileInfo = {
+          filename: filename,
+          bucketName: 'uploads',
+        }
+        resolve(fileInfo)
+      })
+    })
+  },
+})
+
+const upload = multer({ storage })
 
 const turkishtoEnglish = (text) => {
   return text
@@ -319,4 +355,54 @@ adminRouter.post(
   }
 )
 
+adminRouter.delete(
+  '/delete_user',
+  [isAuthenticated, isVerified, isAdmin],
+  async (req, res) => {
+    const { userIDToDelete } = req.body
+
+    if (!userIDToDelete) {
+      return res.status(400).json({ error: 'User ID is required.' })
+    }
+
+    try {
+      // Find the user to delete
+      const user = await User.findById(userIDToDelete)
+      if (!user) {
+        return res.status(404).json({ error: 'User not found.' })
+      }
+
+      // Find all products associated with the user
+      const userProducts = await Product.find({ user: userIDToDelete })
+
+      // Collect file IDs associated with the user's products
+      const productFileIDs = userProducts.reduce((acc, product) => {
+        if (product.fileID) {
+          acc.push(product.fileID)
+        }
+        return acc
+      }, [])
+
+      // Delete files from GridFS
+      for (const fileID of productFileIDs) {
+        await gridfsBucket.delete(new mongoose.Types.ObjectId(fileID))
+      }
+
+      // Delete all products of the user
+      await Product.deleteMany({ user: userIDToDelete })
+
+      // Finally, delete the user
+      await User.findByIdAndRemove(userIDToDelete)
+
+      return res
+        .status(200)
+        .json({ message: 'User and associated data deleted successfully.' })
+    } catch (error) {
+      console.error('Error deleting user:', error)
+      return res
+        .status(500)
+        .json({ error: 'An error occurred while deleting the user.' })
+    }
+  }
+)
 module.exports = adminRouter

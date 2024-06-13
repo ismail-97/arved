@@ -153,7 +153,7 @@ productRouter.delete(
   async (request, response) => {
     // delete product file and chunks
     const product = await Product.findById(request.params.id)
-    gridfsBucket.delete(mongoose.Types.ObjectId(product.fileID))
+    await gridfsBucket.delete(new mongoose.Types.ObjectId(product.fileID))
 
     // delete product itself
     await Product.findByIdAndRemove(request.params.id)
