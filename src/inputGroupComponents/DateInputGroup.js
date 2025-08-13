@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl'
 
 import { Form, InputGroup } from 'react-bootstrap'
 
-const DateInputGroup = ({ name, id, defaultValue }) => {
+const DateInputGroup = ({ name, id, defaultValue, isRequired }) => {
   return (
     <InputGroup className="arved-input-group">
       <DatePickerIcon />
@@ -15,7 +15,7 @@ const DateInputGroup = ({ name, id, defaultValue }) => {
             type="number"
             name={name}
             placeholder={placeholder}
-            required
+            required={isRequired === false ? false : true}
             defaultValue={defaultValue ? defaultValue : ''}
           />
         )}

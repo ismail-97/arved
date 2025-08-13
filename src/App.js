@@ -1,85 +1,48 @@
-import React, { useEffect } from 'react'
-import SignUp from './components/SignUp'
-import Login from './components/Login'
+import React, { useEffect, useState } from 'react'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import Content from './components/Content'
-import EditAccount from './components/EditAccount'
-import AddProdcut from './components/AddProdcut'
-import EditProdcut from './components/EditProduct'
-import Verification from './components/Verification'
-import DepartmentAccounts from './components/DepartmentAccounts'
-import PendingAccounts from './components/PendingAccounts'
-import Report from './components/Report'
-
+import RoutesAfterLogin from './components/RoutesAfterLogin'
+import RoutesBeforeLogin from './components/RoutesBeforeLogin'
 import { setToken } from './services/token'
 import { I18nProvider } from './i18n'
 
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { preLoggedUser } from './reducers/loginReducer'
 
-const RoutesAfterLogin = () => {
-  const user = useSelector((state) => state.loginInfo)
-  return (
-    <Routes>
-      <Route path="/edit-account" element={<EditAccount />} />
-      <Route path="/add-product" element={<AddProdcut />} />
-      <Route path="/edit-product" element={<EditProdcut />} />
-      {user.role === 'admin' && (
-        <Route
-          path="/admin/department-accounts"
-          element={<DepartmentAccounts />}
-        />
-      )}
-      {user.role === 'admin' && (
-        <Route path="/admin/pending-accounts" element={<PendingAccounts />} />
-      )}
-      {user.role === 'admin' && (
-        <Route path="/admin/create-report" element={<Report />} />
-      )}
-      <Route path="/profile" element={<Content />} />
-      <Route path="/" element={<Navigate replace to="/profile" />} />
-      <Route path="*" element={<Navigate replace to="/" />} />
-    </Routes>
-  )
-}
-const RoutesBeforeLogin = () => {
-  return (
-    <Routes>
-      <Route path="/register" element={<SignUp />} />
-      <Route path="/verification" element={<Verification />} />
-      <Route path="/" element={<Login />} />
-      <Route path="*" element={<Navigate replace to="/" />} />
-    </Routes>
-  )
-}
-
 function App() {
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('userInfo')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setToken(user.token)
-      dispatch(preLoggedUser(user))
+    const initializeApp = async () => {
+      const loggedUserJSON = window.localStorage.getItem('userInfo')
+      if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        setToken(user.token)
+        await dispatch(preLoggedUser(user))
+      }
+      setLoading(false)
     }
+
+    initializeApp()
   }, [dispatch])
+
   const user = useSelector((state) => state.loginInfo)
+  const language = useSelector((state) => state.language)
+
+  if (loading) {
+    return <div className="spinner"></div>
+  }
+
   return (
-    <I18nProvider locale={useSelector((state) => state.language)}>
+    <I18nProvider locale={language}>
       <Router>
         <div className="container d-flex ">
           <Header />
           <div className="container ">
-            {user ? <RoutesAfterLogin /> : <RoutesBeforeLogin />}
+            {user ? <RoutesAfterLogin user={user} /> : <RoutesBeforeLogin />}
           </div>
           <Footer />
         </div>

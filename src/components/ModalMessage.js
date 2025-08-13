@@ -1,9 +1,12 @@
 import Modal from 'react-bootstrap/Modal'
-import React from 'react'
-import { clearLoginInfo } from '../reducers/loginReducer'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-// import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
+import { clearLoginInfo } from '../reducers/loginReducer'
 import { editUser } from '../reducers/userReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import translate from '../i18n/messages/translate'
 
 const ModalMessage = (props) => {
   return (
@@ -55,39 +58,53 @@ const Footer = ({ footer, type }) => {
 }
 
 const ModalButton = ({ text }) => {
-  //   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const logout = () => {
-    window.localStorage.clear()
-    dispatch(clearLoginInfo())
-    // navigate('/')
-    window.location.reload()
+  const logout = async () => {
+    setLoading(true)
+
+    try {
+      window.localStorage.clear()
+      await dispatch(clearLoginInfo())
+      navigate('/')
+      window.location.reload()
+    } catch (error) {
+      dispatch(setNotification(error.message))
+    }
   }
-  const appeal = () => {
-    dispatch(editUser({ status: 'pending' }))
-    window.localStorage.clear()
 
-    // navigate('/')
-    window.location.reload()
+  const appeal = async () => {
+    setLoading(true)
+
+    try {
+      await dispatch(editUser({ status: 'pending' }))
+      setLoading(false)
+      window.localStorage.clear()
+      window.location.reload()
+    } catch (error) {
+      setLoading(false)
+      dispatch(setNotification(error.message))
+    }
   }
 
   if (text === 'Log Out')
     return (
       <button className="arved-button4 text-center" onClick={logout}>
-        {text}
+        {translate('logOut')}
       </button>
     )
   else if (text === 'Send')
     return (
       <button className="arved-button4 text-center" onClick={appeal}>
-        {text}
+        {translate('send')}
       </button>
     )
-  else if (text === 'Appeal')
+  else if (text === 'appeal')
     return (
       <button className="arved-button3 text-center" onClick={appeal}>
-        {text}
+        {translate('appeal')}
       </button>
     )
   return null

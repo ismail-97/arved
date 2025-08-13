@@ -1,8 +1,11 @@
 import { Form, InputGroup } from 'react-bootstrap'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
+
 import ListIcon from '../iconComponents/icons/ListIcon'
 
 const AcademicTitleInputGroup = (props) => {
+  const intl = useIntl()
+
   return (
     <InputGroup className="arved-input-group">
       <FormattedMessage id="academic title list">
@@ -16,22 +19,22 @@ const AcademicTitleInputGroup = (props) => {
           >
             {!props?.uneditable && <option>{placeholder}</option>}
             <option value="Prof. Dr." className="bg-light">
-              Prof. Dr.
+              {intl.formatMessage({ id: 'Prof. Dr.' })}
             </option>
             <option value="Assoc. Prof. Dr." className="bg-light">
-              Assoc. Prof. Dr.
+              {intl.formatMessage({ id: 'Assoc. Prof. Dr.' })}
             </option>
             <option value="Assist. Prof. Dr." className="bg-light">
-              Assist. Prof. Dr.
+              {intl.formatMessage({ id: 'Assist. Prof. Dr.' })}
             </option>
             <option value="Dr." className="bg-light">
-              Dr.
+              {intl.formatMessage({ id: 'Dr.' })}
             </option>
             <option value="Inst." className="bg-light">
-              Inst.
+              {intl.formatMessage({ id: 'Inst.' })}
             </option>
             <option value="Res. Assist." className="bg-light">
-              Res. Assist.
+              {intl.formatMessage({ id: 'Res. Assist.' })}
             </option>
           </Form.Select>
         )}

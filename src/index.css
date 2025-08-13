@@ -479,6 +479,7 @@ body {
   font-size: 16px;
   text-align: right;
   margin-bottom: 10px;
+  text-transform: capitalize;
 }
 .view-product-field-text {
   font-size: 16px;
@@ -489,6 +490,7 @@ body {
   gap: 7px;
   overflow: hidden;
   padding: 0;
+  text-transform: capitalize;
 }
 .view-product-field-document {
   color: black;
@@ -622,6 +624,10 @@ li span {
   .option {
     color: #134383;
     padding: 10px;
+  }
+
+  .title {
+    font-size: 24px;
   }
 
   .navbar-links {
@@ -760,7 +766,33 @@ li span {
   .pending_account_profile_photo {
     display: none;
   }
+
+  .userInfo > button {
+    display: none !important;
+  }
 }
 
 @media only screen and (max-width: 360px) {
+}
+
+.spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-top: 5px solid #134383;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

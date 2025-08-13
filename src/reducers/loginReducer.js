@@ -1,8 +1,6 @@
 import loginService from '../services/login'
 import { setToken } from '../services/token'
 
-import { setNotification } from './notificationReducer'
-
 const user = null
 const loginReducer = (state = user, action) => {
   switch (action.type) {
@@ -31,18 +29,29 @@ export const loggedUser = ({ email, password }) => {
         data: user,
       })
     } catch (error) {
-      //implement a notification for this part
-      dispatch(setNotification('Invalid email or password'))
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else {
+        throw new Error('An unknown error occurred.')
+      }
     }
   }
 }
 
 export const preLoggedUser = (user) => {
   return async (dispatch) => {
-    dispatch({
-      type: 'LOGIN',
-      data: user,
-    })
+    try {
+      dispatch({
+        type: 'LOGIN',
+        data: user,
+      })
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else {
+        throw new Error('An unknown error occurred.')
+      }
+    }
   }
 }
 
@@ -66,9 +75,17 @@ export const registerUser = (newUser) => {
 
 export const clearLoginInfo = () => {
   return async (dispatch) => {
-    dispatch({
-      type: 'CLEAR',
-    })
+    try {
+      dispatch({
+        type: 'CLEAR',
+      })
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else {
+        throw new Error('An unknown error occurred.')
+      }
+    }
   }
 }
 

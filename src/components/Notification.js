@@ -13,7 +13,11 @@ const Notification = (props) => {
     }, props.time)
 
     if (props.type === 'error') {
-      return <div className="alert alert-danger">{notification}</div>
+      return(
+        <div className="alert alert-danger">
+          {notification.split(',').map((n, index) => <div key={`${n.trim()}-${index}`}>{n}</div>)}
+        </div>
+      )
     }
     return (
       <div

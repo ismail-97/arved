@@ -1,10 +1,10 @@
 import axios from 'axios'
 import { getToken } from '../services/token'
 
-const baseUrl = ''
+const apiUrl = process.env.REACT_APP_API_URL
 
 const getInfo = async () => {
-  const response = await axios.get(`${baseUrl}/user/info`, {
+  const response = await axios.get(`${apiUrl}/user/info`, {
     headers: { Authorization: getToken() },
   })
   return response.data
@@ -12,7 +12,7 @@ const getInfo = async () => {
 
 const editUser = async (editedUserInfo) => {
   const response = await axios.put(
-    `${baseUrl}/user/edit-user`,
+    `${apiUrl}/user/edit-user`,
     editedUserInfo,
     {
       headers: { Authorization: getToken() },

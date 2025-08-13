@@ -3,7 +3,18 @@ import { LOCALES } from '../locales'
 
 export default {
   [LOCALES.ENGLISH]: {
+    //buttons
     'sign-in': 'Sign In',
+    signUp: 'Sign Up',
+    accept: 'accept',
+    reject: 'reject',
+    logOut: 'Log Out',
+    send: 'send',
+    appeal: 'appeal',
+    search: 'search',
+
+    insteadLogin: 'I have an account.',
+
     language: 'TR',
     'brand-name': 'ANKARA UNIVERSITY',
     'new-account': 'create a new account',
@@ -14,7 +25,6 @@ export default {
     'add-product': 'ADD A PRODUCT',
     'add-a-product': 'Add a Product',
     'sign-out': 'SIGN OUT',
-    project: 'Project',
     type: 'Type',
     year: 'Year',
     product: 'Product',
@@ -23,6 +33,14 @@ export default {
     title: 'Title',
     'type of academic product': 'Type of Academic Report',
     author: 'Author',
+    authors: 'Authors',
+    productType: 'product type',
+    downloadDocument: 'download document',
+    link: 'link',
+    productURL: 'product URL',
+    description: 'description',
+    publicationDate: 'Publication Date',
+
     'publication date': 'Publication Date',
     publisher: 'Publisher',
     document: 'Document',
@@ -32,16 +50,40 @@ export default {
     add: 'Add',
     cancel: 'Cancel',
     URL: 'URL',
-    article: 'article',
-    'book chapter': 'book chapter',
-    'conference paper': 'conference paper',
     Name: 'Name',
     Surname: 'Surname',
     repeatedPassword: 'Repeat The Password',
     'Academic ID': 'Academic ID',
     'academic title list': 'Academic Title',
-    'faculty list': 'Faculty',
-    'department list': 'Department',
+    chooseFaculty: 'Select Faculty',
+    chooseDepartment: 'Select Department',
+
+    // project types
+    All: 'All',
+    article: 'article',
+    project: 'project',
+    'conference paper': 'conference paper',
+    'book chapter': 'book chapter',
+
+    //academic titles
+    'Prof. Dr.': 'Prof. Dr.',
+    'Assoc. Prof. Dr.': 'Assoc. Prof. Dr.',
+    'Assist. Prof. Dr.': 'Assist. Prof. Dr.',
+    'Dr.': 'Dr.',
+    'Inst.': 'Inst.',
+    'Res. Assist.': 'Res. Assist.',
+
+    //departments
+    'computer engineering': 'computer engineering',
+
+    //pages
+    listOfAccounts: 'list of accounts',
+    pendingAccounts: 'pending accounts',
+    createReport: 'create a report',
+    creatingReport: 'Creating A Report',
+    searchNoun: 'search',
+    downloadReport: 'Download A Report Of All Results',
+
     studyField: 'Field Of Study',
     unverifiedModalHeader: 'Your email has not been verified.',
     unverifiedModalBody:
@@ -70,7 +112,7 @@ export default {
     deleteModalHeader: 'Delete Academic Product',
     deleteModalBody: 'Are you sure you want to delete this academic product?',
     deleteModalFooter: 'This operation cannot be undone!',
-    ORCİd: 'ORCİd',
+    ORCid: 'ORCid',
     indexType: 'Index Type',
   },
 }

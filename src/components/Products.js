@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import translate from '../i18n/messages/translate'
 import ProductTable from './ProductTable'
 import Notification from '../components/Notification'
+import { setNotification } from '../reducers/notificationReducer'
 
 const Products = () => {
   const navigate = useNavigate()
@@ -15,19 +16,23 @@ const Products = () => {
   }, [dispatch])
   const products = useSelector((state) => state.products.userProducts)
 
+  const addProduct = () => {
+    dispatch(setNotification(''))
+    navigate('/add-product')
+  }
   return (
     <div>
       <div className="d-flex justify-content-end my-3 p-0 pr-sm-3">
         <button
           className="arved-button2 d-flex align-items-center"
           style={{ backgroundColor: 'transparent' }}
-          onClick={() => navigate('/add-product')}
+          onClick={addProduct}
         >
           <AddProductIcon className="mx-1" />
           <span>{translate(`add-a-product`)}</span>
         </button>
       </div>
-      <Notification />
+      <Notification time="5000" />
       <ProductTable products={products} role="user" />
     </div>
   )

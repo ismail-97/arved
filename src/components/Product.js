@@ -5,11 +5,16 @@ import translate from '../i18n/messages/translate'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal'
+import { setNotification } from '../reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
 const Product = ({ product, role }) => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const editItem = (product) => {
+    dispatch(setNotification(''))
+
     navigate(`/edit-product`, { state: product })
   }
   const [modalShow, setModalShow] = useState(false)

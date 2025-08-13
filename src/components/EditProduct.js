@@ -17,8 +17,11 @@ import FileUploadIcon from '../iconComponents/icons/FileUploadIcon'
 import DocumentIcon from '../iconComponents/icons/DocumentIcon'
 import { editProduct } from '../reducers/productReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import Notification from './Notification'
 
 const EditProduct = () => {
+  const [loading, setLoading] = useState(false)
+  const [uploadedFile, setFile] = useState('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -26,41 +29,38 @@ const EditProduct = () => {
   const product = state
 
   const editItem = async (event) => {
+    setLoading(true)
     event.preventDefault()
-    const authors = []
-    Array.from(event.target.authors).map((input) => authors.push(input.value))
+    const formData = new FormData(event.target)
+    const authors = formData.getAll('authors')
+
     try {
-      await dispatch(
-        editProduct(
-          {
-            title: event.target.title.value,
-            type: event.target.type.value,
-            authors:
-              event.target.authors.length === undefined
-                ? authors.concat(event.target.authors.value)
-                : authors,
-            publication_date: event.target.publication_date.value,
-            publisher: event.target.publisher.value,
-            file: uploadedFile,
-            url: event.target.url.value,
-            citations: event.target.citations.value,
-            description: event.target.description.value,
-            sciIndex: event.target.sciIndex.value,
-          },
-          product.id
-        )
-      )
-      dispatch(setNotification('Product Edit Successfully'))
+      const editedProduct = {
+        title: event.target.title.value,
+        type: event.target.type.value,
+        authors: authors,
+        publication_date: event.target.publication_date.value,
+        publisher: event.target.publisher.value,
+        file: uploadedFile,
+        url: event.target.url.value,
+        citations: event.target.citations.value,
+        description: event.target.description.value,
+        sciIndex: event.target.sciIndex.value,
+      }
+      await dispatch(editProduct(editedProduct, product.id))
+      setLoading(false)
+      dispatch(setNotification('Product Edited Successfully'))
       navigate('/profile')
     } catch (error) {
-      console.log(error)
+      setLoading(false)
+      dispatch(setNotification(error.message))
     }
   }
+
   const cancelEditing = async (event) => {
     event.preventDefault()
     navigate('/profile')
   }
-  const [uploadedFile, setFile] = useState('')
 
   const onChangeFile = (event) => {
     setFile(event.target.files[0])
@@ -68,7 +68,11 @@ const EditProduct = () => {
 
   return (
     <div className="product-page ">
+      {loading && <div className="spinner"></div>}
+
       <div className="form-text">Edit An Academic Product</div>
+      <Notification time="5000" type="error" />
+
       <Form
         onSubmit={editItem}
         className="justify-content-around text-capitalize form  py-4 px-sm-3 px-md-5"

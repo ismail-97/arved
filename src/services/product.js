@@ -3,7 +3,8 @@ import { getToken } from '../services/token'
 import { saveAs } from 'filesaver.js-npm'
 const FormData = require('form-data')
 
-const baseUrl = '/user/products'
+const apiUrl = process.env.REACT_APP_API_URL
+const baseUrl = `${apiUrl}/user/products`
 
 const getProducts = async () => {
   const response = await axios.get(`${baseUrl}`, {
@@ -13,7 +14,7 @@ const getProducts = async () => {
 }
 const getProductsReport = async (products) => {
   const response = axios
-    .post(`/admin/filter/create-pdf`, products, {
+    .post(`${apiUrl}/admin/filter/create-pdf`, products, {
       responseType: 'arraybuffer',
       headers: {
         Authorization: getToken(),
@@ -26,6 +27,14 @@ const getProductsReport = async (products) => {
         'report.pdf'
       )
     })
+    .catch((error) => {
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else {
+        throw new Error('An unknown error occurred.')
+      }
+    })
+
   return response.data
 }
 const getProductDocument = async (fileId) => {
@@ -95,7 +104,7 @@ const deleteAProduct = async (productId) => {
 }
 
 const searchProducts = async (criteria) => {
-  const response = await axios.post(`/admin/filter`, criteria, {
+  const response = await axios.post(`${apiUrl}/admin/filter`, criteria, {
     headers: { Authorization: getToken() },
   })
   return response.data

@@ -1,8 +1,21 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { LOCALES } from '../locales'
 
 export default {
   [LOCALES.TURKISH]: {
+    //buttons
+
     'sign-in': 'Giriş Yap',
+    signUp: 'Üye Ol',
+    accept: 'Onayla',
+    reject: 'reddet',
+    logOut: 'Çıkış Yap',
+    send: 'gönder',
+    appeal: 'itiraz et',
+    search: 'ara',
+
+    insteadLogin: 'bir hesabım var.',
+
     language: 'EN',
     'brand-name': 'ANKARA ÜNİVERSİTESİ',
     'new-account': 'Yeni Bir hesap oluştur',
@@ -13,7 +26,6 @@ export default {
     'add-product': 'ÜRÜN EKLE',
     'add-a-product': 'Ürün Ekle',
     'sign-out': 'ÇIKIŞ YAP',
-    project: 'Proje',
     type: 'Tip',
     year: 'Yıl',
     product: 'Ürün',
@@ -22,24 +34,56 @@ export default {
     title: 'Başlık',
     'type of academic product': 'Akademik Rapor Türü',
     author: 'Yazar',
+    authors: 'Yazarlar',
+    productType: 'ürün tipi',
     'publication date': 'Yayın Tarihi',
     publisher: 'Yayımcı',
     document: 'Belge',
+    downloadDocument: 'belgeyi indir',
+    link: 'bağlantı',
+    productURL: 'ürün URL',
     citations: 'Alıntı',
+    description: 'Açıklama',
+    publicationDate: 'Yayın Tarihi',
     'description of the academic product': 'Akademik ürünün açıklaması',
     add: 'Ekle',
     cancel: 'İptal',
     URL: 'URL',
-    article: 'mekale',
-    'book chapter': 'kitap parçası',
-    'conference paper': 'konferans kağıdı',
     Name: 'Ad',
     Surname: 'Soyad',
     repeatedPassword: 'Şifreyi Tekrarla',
     'Academic ID': 'Akademik ID',
     'academic title list': 'Akademik Ünvan',
-    'faculty list': 'Fakülte',
-    'department list': 'Bölüm',
+    chooseFaculty: 'Fakülte Seçin',
+    chooseDepartment: 'Bölüm Seçin',
+
+    // project types
+    All: 'Hepsi',
+    article: 'makale',
+    project: 'proje',
+    'conference paper': 'konferans makalesi',
+    'book chapter': 'kitap bölümü',
+
+    //academic titles
+    'Prof. Dr.': 'Prof. Dr.',
+    'Dr.': 'Dr.',
+
+    'Assoc. Prof. Dr.': 'Doç. Dr.',
+    'Assist. Prof. Dr.': 'Dr. Öğr. Üyesi',
+    'Inst.': 'Öğr. Gör.',
+    'Res. Assist.': 'Arş. Gör.',
+
+    //departments
+    'computer engineering': 'bilgisayar mühendislik',
+
+    //pages
+    listOfAccounts: 'hesaplar listesi',
+    pendingAccounts: 'bekleyen hesaplar',
+    createReport: 'rapor oluştur',
+    creatingReport: 'Rapor Oluşturma',
+    searchNoun: 'arama',
+    downloadReport: 'Tüm Sonuçların Raporunu İndir',
+
     studyField: 'Çalışma Alanı',
     unverifiedModalHeader: 'E-posta doğrulanmadı.',
     unverifiedModalBody:
@@ -66,7 +110,7 @@ export default {
     deleteModalHeader: 'Akademik Ürünü Sil',
     deleteModalBody: 'Bu akademik ürünü silmek istediğinizden emin misiniz?',
     deleteModalFooter: 'Bu işlem geri alınamaz!',
-    ORCİd: 'ORCİd',
+    ORCid: 'ORCid',
     indexType: 'İndeks Türü',
   },
 }

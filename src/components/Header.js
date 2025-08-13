@@ -9,15 +9,17 @@ import CreateReportIcon from '../iconComponents/icons/CreateReportIcon'
 import PendingAccountsIcon from '../iconComponents/icons/PendingAccountsIcon'
 import { useSelector, useDispatch } from 'react-redux'
 import translate from '../i18n/messages/translate'
-import { useNavigate, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { toggleLanguage } from '../reducers/languageReducer'
 import { clearLoginInfo } from '../reducers/loginReducer'
-
-const color = window.innerWidth < 992 ? '#134383' : '#fff'
+import React, { useState } from 'react'
 
 const Header = () => {
-  const navigate = useNavigate()
+  const [expanded, setExpanded] = useState(false)
+  const handleNavCollapse = () => setExpanded(false)
+
   const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
 
   const user = useSelector((state) => state.loginInfo)
   let viewWhenApproved
@@ -32,17 +34,27 @@ const Header = () => {
   else viewWhenApproved = { display: 'none' }
 
   const logout = async () => {
-    window.localStorage.clear()
-    await dispatch(clearLoginInfo())
-    navigate('/')
-    window.location.reload()
+    setLoading(true)
+
+    try {
+      window.localStorage.clear()
+      await dispatch(clearLoginInfo())
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
+    }
   }
-  const changeLang = () => {
+  const changeLang = (event) => {
+    event.preventDefault()
+
     dispatch(toggleLanguage())
   }
+
   return (
     <header className="arved-navbar">
-      <Navbar className="w-100" expand="lg">
+      {loading && <div className="spinner"></div>}
+
+      <Navbar className="w-100" expand="lg" expanded={expanded}>
         <Container>
           <Navbar.Brand style={{ color: 'white' }} className="navbar-brand">
             <UniversityIcon className="mr-1" />
@@ -51,12 +63,13 @@ const Header = () => {
           <Navbar.Toggle
             aria-controls="basic-navbar-nav"
             className="mr-3 mr-1-sm navbar-dark"
+            onClick={() => setExpanded(!expanded)}
           />
           <Navbar.Collapse
             id="basic-navbar-nav"
             className="justify-content-end navbar-links "
           >
-            <Nav>
+            <Nav onClick={handleNavCollapse}>
               <Link to="/profile" className="option" style={viewWhenApproved}>
                 <ProfileIcon style={{ marginLeft: 3 }} />
                 <span className="">{translate('my-profile')}</span>
@@ -73,17 +86,26 @@ const Header = () => {
               </Link>
               {user && user.role === 'admin' && (
                 <div className=" d-block d-md-none">
-                  <Link to="/admin/department-accounts" className="option">
+                  <Link to="/admin/department-accounts" className="option ">
                     <ListOfAccountsIcon style={{ marginLeft: '-5px' }} />
-                    <span className="nav-link-text">LIST OF ACCOUNTS</span>
+                    <span className="nav-link-text text-uppercase">
+                      {' '}
+                      {translate('listOfAccounts')}
+                    </span>
                   </Link>
-                  <Link to="/admin/pending-accounts" className="option">
+                  <Link to="/admin/pending-accounts" className="option ">
                     <PendingAccountsIcon color="#134383" />
-                    <span className="nav-link-text"> PENDING ACCOUNTS</span>
+                    <span className="nav-link-text text-uppercase">
+                      {' '}
+                      {translate('pendingAccounts')}
+                    </span>
                   </Link>
-                  <Link to="/admin/create-report" className="option ">
+                  <Link to="/admin/create-report" className="option">
                     <CreateReportIcon />
-                    <span className="nav-link-text"> CREATE A REPORT</span>
+                    <span className="nav-link-text text-uppercase">
+                      {' '}
+                      {translate('createReport')}
+                    </span>
                   </Link>
                 </div>
               )}
@@ -98,9 +120,9 @@ const Header = () => {
               </Link>
               <Link
                 to="/"
-                className="option "
+                className="option"
                 style={{ gap: '5px' }}
-                onClick={() => changeLang()}
+                onClick={changeLang}
               >
                 <LanguageIcon />
                 <span className="nav-link-text"> {translate('language')}</span>

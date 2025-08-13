@@ -8,14 +8,20 @@ import productService from '../services/product'
 import { useState } from 'react'
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setNotification } from '../reducers/notificationReducer'
 
 const ViewProduct = (props) => {
+  const dispatch = useDispatch()
+
   const downloadDocument = async (fileId) => {
     if (fileId) await productService.getProductDocument(fileId)
   }
   const [deleteModalShow, setDeleteModalShow] = useState(false)
   const navigate = useNavigate()
   const editItem = (product) => {
+    dispatch(setNotification(''))
+
     navigate(`/edit-product`, { state: product })
   }
   return (
@@ -52,42 +58,48 @@ const ViewProduct = (props) => {
         )}
         <div className="container mt-3 p-0">
           <div className="row">
-            <div className="view-product-field col-4 col-sm-3">Authors:</div>
-            <div className="view-product-field-text col-7 col-sm-8 pl-5 text-capitalize">
+            <div className="view-product-field col-4 col-sm-3">
+              {translate('authors')}:
+            </div>
+            <div className="view-product-field-text col-7 col-sm-8  pl-3 pl-sm-5 text-capitalize">
               {props.product.authors.join(', ')}
             </div>
           </div>
           <div className="row">
             <div className="view-product-field col-4 col-sm-3">
-              Type of Product:
+              {translate('productType')}:
             </div>
-            <div className="view-product-field-text col-7 col-sm-8 pl-5 text-capitalize">
-              {props.product.type}
+            <div className="view-product-field-text col-7 col-sm-8  pl-3 pl-sm-5 text-capitalize">
+              {translate(props.product.type)}
             </div>
           </div>
           <div className="row">
             <div className="view-product-field col-4 col-sm-3">
-              Publication Date:
+              {translate('publicationDate')}:
             </div>
-            <div className="view-product-field-text col-7 col-sm-8 pl-5 text-capitalize">
+            <div className="view-product-field-text col-7 col-sm-8 pl-3 pl-sm-5">
               {props.product.publication_date}
             </div>
           </div>
           <div className="row">
-            <div className="view-product-field col-4 col-sm-3">Publisher:</div>
-            <div className="view-product-field-text col-7 col-sm-8 pl-5 text-capitalize">
+            <div className="view-product-field col-4 col-sm-3">
+              {translate('publisher')}:
+            </div>
+            <div className="view-product-field-text col-7 col-sm-8  pl-3 pl-sm-5 text-capitalize">
               {props.product.publisher}
             </div>
           </div>
           <div className="row">
-            <div className="view-product-field col-4 col-sm-3">Document:</div>
+            <div className="view-product-field col-4 col-sm-3">
+              {translate('document')}:
+            </div>
             <div
-              className="text-capitalize view-product-field-text view-product-field-document col-7 col-sm-8 pl-5 "
+              className="text-capitalize view-product-field-text view-product-field-document col-7 col-sm-8  pl-3 pl-sm-5 "
               onClick={() => downloadDocument(props.product.fileID)}
             >
               {props.product.fileID ? (
                 <>
-                  <div> Download Document</div>
+                  <div> {translate('downloadDocument')}:</div>
                   <div>
                     {' '}
                     <DownloadIcon />
@@ -99,34 +111,38 @@ const ViewProduct = (props) => {
             </div>
           </div>
           <div className="row">
-            <div className="view-product-field col-4 col-sm-3">Link:</div>
-            <div className="view-product-field-text col-7 col-sm-8 pl-5 ">
+            <div className="view-product-field col-4 col-sm-3">
+              {translate('link')}:
+            </div>
+            <div className="view-product-field-text col-7 col-sm-8  pl-3 pl-sm-5 ">
               <a
                 href={props.product.url}
-                className="view-product-field-document"
+                className="view-product-field-document text-capitalize"
               >
-                {props.product.url ? 'Product URL' : '-'}
+                {props.product.url ? translate('productURL') : '-'}
               </a>
             </div>
           </div>
           <div className="row">
-            <div className="view-product-field col-4 col-sm-3">Citations:</div>
-            <div className="view-product-field-text col-7 col-sm-8 pl-5 ">
+            <div className="view-product-field col-4 col-sm-3">
+              {translate('citations')}:
+            </div>
+            <div className="view-product-field-text col-7 col-sm-8  pl-3 pl-sm-5">
               {props.product.citations}
             </div>
           </div>
           <div className="row">
             <div className="view-product-field col-4 col-sm-3 ">Indexed:</div>
-            <div className="view-product-field-text col-7 col-sm-8 pl-5 ">
+            <div className="view-product-field-text col-7 col-sm-8  pl-3 pl-sm-5 ">
               {props.product.sciIndex}
             </div>
           </div>
           <div className="row">
             <div className="view-product-field col-4 col-sm-3">
-              Description:
+              {translate('description')}:
             </div>
             {props.product.description && (
-              <div className="view-product-field-text col-7 col-sm-8 pl-5 ">
+              <div className="view-product-field-text col-7 col-sm-8  pl-3 pl-sm-5 ">
                 {props.product.description.substr(0, 400)}
               </div>
             )}

@@ -43,7 +43,7 @@ const AuthorsInputGroup = (props) => {
               type="text"
               name="authors"
               placeholder={placeholder}
-              required
+              required={props.isRequired === false ? false : true}
               value={authors[0]?.value || ''}
               onChange={(e) =>
                 handleAuthorChange(authors[0]?.id, e.target.value)
@@ -57,6 +57,7 @@ const AuthorsInputGroup = (props) => {
         authors={authors.slice(1)}
         deleteAuthor={deleteAuthor}
         handleAuthorChange={handleAuthorChange}
+        isRequired={props.isRequired}
       />
     </div>
   )
@@ -66,6 +67,7 @@ const MultiAuthorsInputGroup = ({
   authors,
   deleteAuthor,
   handleAuthorChange,
+  isRequired,
 }) => {
   return (
     <div>
@@ -85,7 +87,7 @@ const MultiAuthorsInputGroup = ({
                 type="text"
                 name="authors"
                 placeholder={placeholder}
-                required
+                required={isRequired === false ? false : true}
                 value={value}
                 onChange={(e) => handleAuthorChange(id, e.target.value)}
               />

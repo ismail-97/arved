@@ -17,11 +17,19 @@ const userReducer = (state = initialUser, action) => {
 
 export const getUserInfo = () => {
   return async (dispatch) => {
-    const userInfo = await userService.getInfo()
-    dispatch({
-      type: 'USER_INFO',
-      data: userInfo,
-    })
+    try {
+      const userInfo = await userService.getInfo()
+      dispatch({
+        type: 'USER_INFO',
+        data: userInfo,
+      })
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.error) {
+        throw new Error(error.response.data.error)
+      } else {
+        throw new Error('An unknown error occurred.')
+      }
+    }
   }
 }
 

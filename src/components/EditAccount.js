@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Form, Container, Row, Col, Button } from 'react-bootstrap'
+import { useLocation } from 'react-router-dom'
 
 import NameInputGroup from '../inputGroupComponents/NameInputGroup'
 import SurnameInputGroup from '../inputGroupComponents/SurnameInputGroup'
@@ -13,15 +14,21 @@ import Notification from './Notification'
 import { setNotification } from '../reducers/notificationReducer'
 
 import { editUser } from '../reducers/userReducer'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 const EditAccount = (props) => {
+  const [loading, setLoading] = useState(false)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const user = useSelector((state) => state.user)
+
+  const { state } = useLocation()
+  const user = state
 
   const editAccount = async (event) => {
+    setLoading(true)
+
     event.preventDefault()
 
     const formData = new FormData(event.target)
@@ -34,8 +41,13 @@ const EditAccount = (props) => {
           fields: fields,
         })
       )
+      setLoading(false)
+      dispatch(setNotification(''))
+
       navigate('/profile')
     } catch (error) {
+      setLoading(false)
+
       dispatch(setNotification(error.message))
     }
   }
@@ -44,8 +56,11 @@ const EditAccount = (props) => {
     event.preventDefault()
     navigate('/profile')
   }
+
   return (
     <div className="product-page d-flex w-100 justify-content-center">
+      {loading && <div className="spinner"></div>}
+
       <div>
         <div className="form-text">Edit Account</div>
         <Notification time="5000" type="error" />

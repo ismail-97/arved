@@ -5,6 +5,7 @@ import { getUserInfo } from '../reducers/userReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import translate from '../i18n/messages/translate'
 import { useNavigate } from 'react-router-dom'
+import { setNotification } from '../reducers/notificationReducer'
 
 const UserInfo = () => {
   const dispatch = useDispatch()
@@ -16,7 +17,7 @@ const UserInfo = () => {
     return (
       <div className="text-capitalize">
         <h4 className="title">
-          <span>{user.title} </span>
+          <span>{translate(user.title)} </span>
           <span>
             {user.name} {user.surname}
           </span>
@@ -42,7 +43,16 @@ const UserInfo = () => {
 }
 
 const Profile = () => {
+  const user = useSelector((state) => state.user)
+
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  const editAccount = (user) => {
+    dispatch(setNotification(''))
+
+    navigate(`/edit-account`, { state: user })
+  }
 
   return (
     <div className="profile d-flex justify-content-between m-auto ">
@@ -53,7 +63,7 @@ const Profile = () => {
 
           <button
             className="d-flex arved-button2 align-items-center mr-1 mr-sm-3"
-            onClick={() => navigate('/edit-account')}
+            onClick={() => editAccount(user)}
           >
             <EditProfileIcon className="mx-1" />
             {translate(`edit`)}

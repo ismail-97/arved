@@ -18,33 +18,33 @@ import CitationsInputGroup from '../inputGroupComponents/CitationsInputGroup'
 import DescriptionInputGroup from '../inputGroupComponents/DescriptionInputGroup'
 import { addNewProduct } from '../reducers/productReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import Notification from './Notification'
 
 const AddProduct = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  const [loading, setLoading] = useState(false)
   const [uploadedFile, setFile] = useState('')
+
   const onChangeFile = (event) => {
     setFile(event.target.files[0])
   }
 
   const addItem = async (event) => {
+    setLoading(true)
+
     event.preventDefault()
-    let authors = []
-    Array.from(event.target.authors).map((input) => {
-      authors = authors.concat(input.value)
-      return authors
-    })
-    console.log(event.target.sciIndex.value)
+    const formData = new FormData(event.target)
+    const authors = formData.getAll('authors')
+    console.log(authors)
+
     try {
       await dispatch(
         addNewProduct({
           title: event.target.title.value,
           type: event.target.type.value,
-          authors:
-            event.target.authors.length === undefined
-              ? authors.concat(event.target.authors.value)
-              : authors,
+          authors: authors,
           publication_date: event.target.publication_date.value,
           publisher: event.target.publisher.value,
           file: uploadedFile,
@@ -54,10 +54,14 @@ const AddProduct = () => {
           sciIndex: event.target.sciIndex.value,
         })
       )
+      setLoading(false)
+
       dispatch(setNotification('Product Added Successfully'))
       navigate('/profile')
     } catch (error) {
-      console.log(error)
+      setLoading(false)
+
+      dispatch(setNotification(error.message))
     }
   }
   const cancelAdding = async (event) => {
@@ -67,7 +71,11 @@ const AddProduct = () => {
 
   return (
     <div className="product-page">
+      {loading && <div className="spinner"></div>}
+
       <div className="form-text">Add An Academic Product</div>
+      <Notification time="5000" type="error" />
+
       <Form
         onSubmit={addItem}
         className="justify-content-around text-capitalize form py-4 px-sm-3 px-md-5"
@@ -77,7 +85,7 @@ const AddProduct = () => {
             <Col className="col-12 col-md-6">
               <TitleInputGroup />
               <TypeInputGroup />
-              <AuthorsInputGroup iconsNo={1} />
+              <AuthorsInputGroup />
               <DateInputGroup name="publication_date" id={'publication date'} />
               <PublisherInputGroup />
               <IndexInputGroup />

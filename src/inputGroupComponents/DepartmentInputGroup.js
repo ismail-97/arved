@@ -15,7 +15,7 @@ const DepartmentInputGroup = (props) => {
 
   return (
     <InputGroup className="justify-content-end arved-input-group">
-      <FormattedMessage id="department list">
+      <FormattedMessage id="chooseDepartment">
         {(placeholder) => (
           <Form.Select
             className="select-group"
@@ -25,7 +25,7 @@ const DepartmentInputGroup = (props) => {
             value={props?.department}
             disabled={props?.uneditable ? true : false}
           >
-            {!props?.uneditable && <option>Select a {placeholder}</option>}
+            {!props?.uneditable && <option>{placeholder}</option>}
             {props?.uneditable && (
               <option value={props?.department} className="bg-light">
                 {props?.department}

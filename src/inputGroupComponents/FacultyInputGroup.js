@@ -9,15 +9,15 @@ import { useSelector, useDispatch } from 'react-redux'
 const FacultyInputGroup = (props) => {
   const dispatch = useDispatch()
   const faculties = useSelector((state) => state.faculties)
-  const getFaculties = () => {
-    dispatch(getAllFaculties())
+  const getFaculties = async () => {
+    await dispatch(getAllFaculties())
   }
   const handleChange = (event) => {
     dispatch(setFaculty(event.target.value))
   }
   return (
     <InputGroup className="justify-content-end arved-input-group">
-      <FormattedMessage id="faculty list">
+      <FormattedMessage id="chooseFaculty">
         {(placeholder) => (
           <Form.Select
             className="select-group"
@@ -28,7 +28,7 @@ const FacultyInputGroup = (props) => {
             value={props?.faculty}
             disabled={props?.uneditable ? true : false}
           >
-            {!props?.uneditable && <option>Select a {placeholder}</option>}
+            {!props?.uneditable && <option>{placeholder}</option>}
             {props?.uneditable && (
               <option value={props?.faculty} className="bg-light">
                 {props?.faculty}

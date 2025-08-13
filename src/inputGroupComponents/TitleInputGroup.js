@@ -2,7 +2,7 @@ import { Form, InputGroup } from 'react-bootstrap'
 import { FormattedMessage } from 'react-intl'
 import TitleIcon from '../iconComponents/icons/TitleIcon'
 
-const TitleInputGroup = ({ defaultValue }) => {
+const TitleInputGroup = ({ defaultValue, isRequired }) => {
   return (
     <InputGroup className="arved-input-group">
       <FormattedMessage id="title" className="">
@@ -13,7 +13,7 @@ const TitleInputGroup = ({ defaultValue }) => {
             name="title"
             placeholder={placeholder}
             defaultValue={defaultValue ? defaultValue : ''}
-            required
+            required={isRequired === false ? false : true}
           />
         )}
       </FormattedMessage>
