@@ -6,8 +6,8 @@ server/dist/
 
 # Environment files
 .env
-client/.env
-server/.env
+**/.env
+
 .env.local
 .env.production
 .env.development
