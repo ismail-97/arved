@@ -43,7 +43,6 @@ const LoginForm = () => {
               className="arved-input-label"
               type="email"
               name="username"
-              defaultValue={'samer@ankara.edu.tr'}
               placeholder={placeholder}
             />
           )}
@@ -57,7 +56,6 @@ const LoginForm = () => {
               className="arved-input-label"
               type="password"
               name="password"
-              defaultValue={'12345678'}
               placeholder={placeholder}
             />
           )}
