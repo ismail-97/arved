@@ -73,11 +73,7 @@ const SignUp = () => {
       <ModalMessage
         show={modalShow}
         onHide={() => setModalShow(true)}
-        header={translate('pendingModalHeader')}
-        body={translate('pendingModalBody')}
-        footer={translate('pendingModalFooter')}
-        footertype="sentence"
-        button="Log Out"
+        body={"Your Account is Created Successfully."}
       />
       <div>
         {loading && <div className="spinner"></div>}

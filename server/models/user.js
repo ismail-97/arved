@@ -49,10 +49,10 @@ const userSchema = new mongoose.Schema({
     unique: true,
     required: true,
     // immutable: true,
-    match: [
-      /^\w+([\.-]?\w+)*@ankara.edu.tr$/,
-      'Please fill a valid email address',
-    ],
+    // match: [
+    //   /^\w+([\.-]?\w+)*@ankara.edu.tr$/,
+    //   'Please fill a valid email address',
+    // ],
   },
   passwordHash: {
     type: String,

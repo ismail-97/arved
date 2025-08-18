@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const loginRouter = require('express').Router()
-const nodemailer = require('nodemailer')
 const Faculty = require('../models/faculty')
 const Department = require('../models/department')
 const isAuthenticated = require('../utils/loginMiddleware')
@@ -11,11 +10,12 @@ const { google } = require('googleapis')
 const User = require('../models/user')
 const faculty = require('../models/faculty')
 
+
 // sign up
 loginRouter.post('/register', async (request, response) => {
   const body = request.body
   const { password } = body
-  // console.log(body)
+
   if (!password || password.length < 8) {
     return response
       .status(400)
@@ -28,30 +28,12 @@ loginRouter.post('/register', async (request, response) => {
     ...body,
     passwordHash: passwordHash,
     role: 'user',
-    status: 'pending',
+    status: 'approved',
     isVerified: true,
   })
 
   const savedUser = await user.save()
-  // email verification
-  // jwt.sign(
-  //     { user: savedUser._id },
-  //     process.env.EMAIL_SECRET,
-  //     { expiresIn: '1d' },
-  //     (error, emailToken) => {
-  //         if (error) {
-  //             response.status(400)
-  //         }
-  //         const url = `http://localhost:3001/confirmation/${emailToken}`;
-  //         transporter.sendMail({
-  //             to: "arvedsystem@outlook.com",
-  //             subject: "Confrim Your ARVED account",
-  //             html: `<html>
-  //             <body> To confim your email click here: <a href= "${url}"> ${url}</a>  </body>
-  //             </html>`
-  //         })
-  //     }
-  // )
+
   response.status(201).json(savedUser)
 })
 
